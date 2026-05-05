@@ -1,0 +1,19 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
+  },
+  /* 
+  async rewrites() {
+    return [
+      {
+        source: '/server/:path*',
+        destination: 'http://localhost:5000/api/:path*', 
+      },
+    ];
+  }, 
+  */
+};
+
+export default nextConfig;
