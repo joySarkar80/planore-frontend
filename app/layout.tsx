@@ -19,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <body className={`${inter.className} min-h-screen flex flex-col bg-slate-50 text-slate-900`}>
-        <Navbar />
+        
         <main className="flex-1">
           {children}
         </main>
-        <Footer />
+        
       </body>
     </html>
   );

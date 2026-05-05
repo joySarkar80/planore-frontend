@@ -50,6 +50,7 @@ export default function EventDetailsPage() {
     if (foundEvent) {
       setEvent(foundEvent)
     }
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [eventId])
 
   if (!event) {
