@@ -4,12 +4,12 @@ import * as React from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  PlusCircle, 
-  Settings, 
-  User, 
+import {
+  LayoutDashboard,
+  Calendar,
+  PlusCircle,
+  Settings,
+  User,
   LogOut,
   Bell,
   Menu,
@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { UserLogOut } from '@/services/auth';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
@@ -34,7 +36,22 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter(); // router ইনিশিয়ালাইজ করুন
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const handleLogOut = async () => {
+    try {
+      await UserLogOut();
+      setUser(null);
+      window.dispatchEvent(new Event("authChanged"));
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row pt-0">
@@ -71,7 +88,7 @@ export default function DashboardLayout({
         </nav>
 
         <div className="p-6 border-t border-slate-100 italic text-slate-400 text-xs font-medium">
-          <button className="flex items-center space-x-3 w-full hover:text-red-500 transition-colors">
+          <button className="flex items-center space-x-3 w-full hover:text-red-500 transition-colors" onClick={handleLogOut}>
             <LogOut className="w-4 h-4" />
             <span>Logout Account</span>
           </button>
@@ -82,7 +99,7 @@ export default function DashboardLayout({
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
         {/* Mobile Header */}
         <header className="lg:hidden h-16 border-b border-slate-200 bg-white flex items-center justify-between px-4 sticky top-0 z-50">
-           <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="bg-indigo-600 p-1 rounded shadow-sm">
               <Calendar className="w-4 h-4 text-white" />
             </div>
@@ -117,7 +134,7 @@ export default function DashboardLayout({
       {/* Mobile Nav Overlay */}
       {isMobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-white pt-16 animate-in fade-in duration-300">
-           <nav className="p-6 space-y-4">
+          <nav className="p-6 space-y-4">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -137,8 +154,8 @@ export default function DashboardLayout({
                 </Link>
               );
             })}
-             <button className="flex items-center space-x-4 px-6 py-4 rounded-2xl text-lg font-bold text-red-500 w-full mt-8 border-t border-slate-100 pt-8">
-              <LogOut className="w-6 h-6" />
+            <button className="flex items-center space-x-4 px-6 py-4 rounded-2xl text-lg font-bold text-red-500 w-full mt-8 border-t border-slate-100 pt-8">
+              <LogOut className="w-6 h-6" onClick={handleLogOut} />
               <span>Logout Account</span>
             </button>
           </nav>
