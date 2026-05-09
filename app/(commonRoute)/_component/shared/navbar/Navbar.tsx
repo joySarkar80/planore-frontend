@@ -7,23 +7,38 @@ import { Calendar, User, LayoutDashboard, LogIn, Menu, X, Search } from 'lucide-
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
+import { getUserFromToken } from '@/services/auth'
 
 const navLinks = [
   { name: 'Home', href: '/', icon: null },
   { name: 'Events', href: '/events', icon: Search },
 ]
 
-const authLinks = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Profile', href: '/profile', icon: User },
-]
-
 export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = React.useState(false)
+  const [user, setUser] = React.useState<any>(null)
 
-  // Mock auth state
-  const isLoggedIn = true 
+  React.useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const userdata = await getUserFromToken();
+        setUser(userdata);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    getCurrentUser();
+
+    window.addEventListener("authChanged", getCurrentUser);
+
+    return () => {
+      window.removeEventListener("authChanged", getCurrentUser);
+    };
+  }, [pathname]);
+
+  const isLoggedIn = !!user
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

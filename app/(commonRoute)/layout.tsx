@@ -1,5 +1,5 @@
-import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/app/(commonRoute)/_component/shared/footer/Footer";
+import { Navbar } from "@/app/(commonRoute)/_component/shared/navbar/Navbar";
 
 
 export default function CommonLayout({
