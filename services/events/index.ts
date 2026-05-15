@@ -1,5 +1,49 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { ICreateEvent } from "@/types/event";
+
+export const createEvent = async (payload: ICreateEvent) => {
+  const cookieStore = await cookies();
+
+  const tokenCookie = cookieStore.get("accessToken");
+
+  const cookieString = tokenCookie
+    ? `${tokenCookie.name}=${tokenCookie.value}`
+    : "";
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/events`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieString,
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    }
+  );
+
+  const data = await res.json();
+
+  // IMPORTANT
+  if (!res.ok) {
+    return {
+      success: false,
+      message: data.message,
+      errorSources: data.errorSources || [],
+    };
+  }
+
+  return {
+    success: true,
+    data: data.data,
+  };
+};
+
+
+
 export const getAllEvents = async (query: Record<string, any>) => {
   try {
     const params = new URLSearchParams();
@@ -38,15 +82,18 @@ export const getAllEvents = async (query: Record<string, any>) => {
 // services/index.ts
 
 export const getSingleEvent = async (id: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`, {
-        method: 'GET',
-        cache: 'no-store',
-        credentials: 'include',
-    })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`, {
+    method: 'GET',
+    cache: 'no-store',
+    credentials: 'include',
+  })
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch single event')
-    }
+  if (!res.ok) {
+    throw new Error('Failed to fetch single event')
+  }
 
-    return res.json()
+  return res.json()
 }
+
+
+

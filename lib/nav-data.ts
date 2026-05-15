@@ -18,21 +18,21 @@ export const NAV_DATA = {
                     url: "/dashboard",
                     icon: LayoutDashboard,
                 },
-                {
-                    title: "All Events",
-                    url: "/dashboard/events",
-                    icon: Calendar,
-                },
-                {
-                    title: "All Users",
-                    url: "/dashboard/users",
-                    icon: Users,
-                },
-                {
-                    title: "Reports",
-                    url: "/dashboard/reports",
-                    icon: ShieldCheck,
-                },
+                // {
+                //     title: "All Events",
+                //     url: "/dashboard/",
+                //     icon: Calendar,
+                // },
+                // {
+                //     title: "All Users",
+                //     url: "/dashboard/",
+                //     icon: Users,
+                // },
+                // {
+                //     title: "Reports",
+                //     url: "/dashboard/",
+                //     icon: ShieldCheck,
+                // },
             ],
         },
     ],
@@ -43,9 +43,14 @@ export const NAV_DATA = {
             url: "/dashboard",
             items: [
                 {
-                    title: "Overview",
+                    title: "Overviewsssss",
                     url: "/dashboard",
                     icon: LayoutDashboard,
+                },
+                {
+                    title: "Create Event",
+                    url: "/dashboard/create-event",
+                    icon: Calendar,
                 },
                 {
                     title: "My Events",

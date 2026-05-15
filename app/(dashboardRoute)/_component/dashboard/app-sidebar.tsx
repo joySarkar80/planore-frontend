@@ -17,7 +17,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const navItems = NAV_DATA[role][0].items;
+    const navSection = NAV_DATA[role][0];
 
     const handleLogOut = async () => {
         try {
@@ -49,7 +49,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4">
-                    <NavMain items={navItems} />
+                    <NavMain section={navSection} />
                 </div>
 
                 <div className="border-t border-slate-100 p-4">
@@ -82,7 +82,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-40 bg-white pt-16 lg:hidden">
                     <div className="space-y-4 p-6">
-                        <NavMain items={navItems} />
+                        <NavMain section={navSection} />
 
                         <button
                             onClick={handleLogOut}
