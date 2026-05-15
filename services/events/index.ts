@@ -1,38 +1,9 @@
 "use server";
 
-// export const getAllEvents = async (searchTerm?: string) => {
-//     try {
-//         // যদি সার্চ প্যারামিটার থাকে তবে সেটি ইউআরএল এ যোগ হবে
-//         const queryParams = searchTerm ? `?searchTerm=${searchTerm}` : "";
-
-//         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events${queryParams}`, {
-//             method: "GET",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             next: {
-//                 revalidate: 60, // প্রতি ৬০ সেকেন্ড পর ডাটা আপডেট হবে (ISR)
-//                 tags: ["events"], // অন-ডিমান্ড রিভ্যালিডেশনের জন্য ট্যাগ
-//             },
-//         });
-
-//         const result = await res.json();
-//         return result;
-//     } catch (error) {
-//         console.error("Error fetching events:", error);
-//         return {
-//             success: false,
-//             message: "Could not fetch events",
-//             data: [],
-//         };
-//     }
-// };
-
 export const getAllEvents = async (query: Record<string, any>) => {
   try {
     const params = new URLSearchParams();
 
-    // অবজেক্টের কী-ভ্যালু জোড়াগুলো কুয়েরি প্যারামিটারে রূপান্তর
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== "" && value !== null) {
         params.append(key, value.toString());

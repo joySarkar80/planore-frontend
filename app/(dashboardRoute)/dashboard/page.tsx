@@ -15,7 +15,7 @@ import Link from 'next/link';
 export default function DashboardPage() {
   const stats = [
     { name: 'Active Events', value: '12', icon: CalendarIcon, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { name: 'Total Registrations', value: '842', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+    { name: 'Total Registrations', value: '8422', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
     { name: 'Profile Views', value: '1.2k', icon: Eye, color: 'text-amber-600', bg: 'bg-amber-50' },
     { name: 'Conversion Rate', value: '24%', icon: TrendingUp, color: 'text-emerald-600', bg: 'bg-emerald-50' },
   ];
