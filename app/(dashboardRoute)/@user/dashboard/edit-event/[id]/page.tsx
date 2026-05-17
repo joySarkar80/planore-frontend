@@ -3,17 +3,23 @@
 import * as React from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { toast } from 'sonner'
-import {
-    ArrowLeft, Calendar, Clock, MapPin, Globe, Lock, DollarSign, Image as ImageIcon, Loader2
-} from 'lucide-react'
-
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { Card } from '@/components/ui/card'
 
 import { getEventById, updateEvent } from '@/services/events/clientEvent'
+import EventDetailsForm from '../../../../_component/page/edit-event/EventDetailsForm'
+import EventSettingsForm from '../../../../_component/page/edit-event/EventSettingsForm'
+
+type FormDataType = {
+    title: string
+    date: string
+    time: string
+    venue: string
+    eventLink: string
+    description: string
+    visibility: string
+    fee: string
+}
 
 export default function EditEventPage() {
     const router = useRouter()
@@ -22,8 +28,9 @@ export default function EditEventPage() {
 
     const [loading, setLoading] = React.useState(true)
     const [updating, setUpdating] = React.useState(false)
+    const [errors, setErrors] = React.useState<Record<string, string>>({})
 
-    const [formData, setFormData] = React.useState({
+    const [formData, setFormData] = React.useState<FormDataType>({
         title: "",
         date: "",
         time: "",
@@ -34,7 +41,11 @@ export default function EditEventPage() {
         fee: "0",
     });
 
-    // ইভেন্ট ডেটা ফেচ করে ফর্মে পপুলেট করা
+    // মনোলিথিক স্টেট আপডেট করার জন্য একটি সেন্ট্রালাইজড হ্যান্ডলার
+    const handleFieldChange = (field: keyof FormDataType, value: string) => {
+        setFormData((prev) => ({ ...prev, [field]: value }))
+    }
+
     React.useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
@@ -42,10 +53,9 @@ export default function EditEventPage() {
                 if (response.success && response.data) {
                     const event = response.data
 
-                    // ISO String থেকে Date এবং Time আলাদা করা (Local Timezone অনুযায়ী)
                     const dateObj = new Date(event.startAt)
-                    const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
-                    const formattedTime = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`
+                    const formattedDate = dateObj.toLocaleDateString('en-CA')
+                    const formattedTime = dateObj.toTimeString().split(' ')[0].slice(0, 5)
 
                     setFormData({
                         title: event.title,
@@ -55,7 +65,7 @@ export default function EditEventPage() {
                         eventLink: event.eventLink || "",
                         description: event.description,
                         visibility: event.visibility,
-                        fee: event.registrationFee.toString(),
+                        fee: Number(event.registrationFee).toString(),
                     })
                 }
             } catch (error: any) {
@@ -72,8 +82,8 @@ export default function EditEventPage() {
         e.preventDefault()
         try {
             setUpdating(true)
+            setErrors({})
 
-            // Date & Time মার্চ করে আবার ISO তে কনভার্ট করা
             const startAt = new Date(`${formData.date}T${formData.time}`).toISOString()
 
             const payload = {
@@ -88,11 +98,20 @@ export default function EditEventPage() {
 
             const result = await updateEvent(eventId, payload)
 
-            if (result.success) {
-                toast.success("Event updated successfully")
-                router.push("/dashboard/my-events")
-                router.refresh()
+            if (!result.success) {
+                toast.error(result.message || "Validation failed")
+                const fieldErrors: Record<string, string> = {}
+                result.errorSources?.forEach((err: { path: string; message: string }) => {
+                    fieldErrors[err.path] = err.message
+                })
+                setErrors(fieldErrors)
+                return
             }
+
+            toast.success("Event updated successfully")
+            router.push("/dashboard/my-events")
+            router.refresh()
+
         } catch (error: any) {
             toast.error(error.message || "Something went wrong while updating")
         } finally {
@@ -111,6 +130,7 @@ export default function EditEventPage() {
 
     return (
         <div className="max-w-4xl mx-auto space-y-8">
+            {/* HEADER */}
             <div className="flex items-center gap-4">
                 <Button variant="ghost" size="icon" onClick={() => router.back()} className="rounded-xl">
                     <ArrowLeft className="h-5 w-5" />
@@ -121,122 +141,40 @@ export default function EditEventPage() {
                 </div>
             </div>
 
+            {/* FORM ORCHESTRATION */}
             <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid lg:grid-cols-3 gap-8">
-                    {/* LEFT COLUMN */}
+
+                    {/* LEFT COLUMN: DETAILS */}
                     <div className="lg:col-span-2 space-y-8">
-                        <Card className="rounded-[2rem] border-none shadow-xl bg-white p-8 md:p-10 space-y-8">
-                            <div className="space-y-4">
-                                <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Event Title</Label>
-                                <Input
-                                    placeholder="Design Systems Workshop"
-                                    className="h-14 bg-slate-50 border-none rounded-2xl text-lg font-bold"
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    required
-                                />
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="space-y-4">
-                                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Date</Label>
-                                    <div className="relative">
-                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                                        <Input
-                                            type="date"
-                                            className="h-14 pl-12 bg-slate-50 border-none rounded-2xl font-bold"
-                                            value={formData.date}
-                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-4">
-                                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Time</Label>
-                                    <div className="relative">
-                                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                                        <Input
-                                            type="time"
-                                            className="h-14 pl-12 bg-slate-50 border-none rounded-2xl font-bold"
-                                            value={formData.time}
-                                            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Venue</Label>
-                                <div className="relative">
-                                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-slate-400" />
-                                    <Input
-                                        placeholder="Central Park"
-                                        className="h-14 pl-12 bg-slate-50 border-none rounded-2xl font-bold"
-                                        value={formData.venue}
-                                        onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Description</Label>
-                                <Textarea
-                                    placeholder="Describe your event..."
-                                    className="min-h-[200px] bg-slate-50 border-none rounded-2xl p-6 font-medium text-lg"
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    required
-                                />
-                            </div>
-                        </Card>
+                        <EventDetailsForm
+                            formData={formData}
+                            errors={errors}
+                            onChange={handleFieldChange}
+                        />
                     </div>
 
-                    {/* RIGHT COLUMN */}
+                    {/* RIGHT COLUMN: SETTINGS & SUBMIT */}
                     <div className="space-y-8">
-                        <Card className="rounded-[2rem] border-none shadow-xl bg-white p-8">
-                            <h3 className="text-xl font-black text-slate-900 mb-8">Privacy & Fee</h3>
-                            <div className="space-y-8">
-                                <div className="space-y-4">
-                                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Visibility</Label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, visibility: "PUBLIC" })}
-                                            className={`h-14 rounded-2xl border transition-all duration-200 flex items-center justify-center gap-2 font-bold ${formData.visibility === "PUBLIC" ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300"}`}
-                                        >
-                                            <Globe className="h-4 w-4" /> Public
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData({ ...formData, visibility: "PRIVATE" })}
-                                            className={`h-14 rounded-2xl border transition-all duration-200 flex items-center justify-center gap-2 font-bold ${formData.visibility === "PRIVATE" ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300"}`}
-                                        >
-                                            <Lock className="h-4 w-4" /> Private
-                                        </button>
-                                    </div>
-                                </div>
+                        <EventSettingsForm
+                            formData={formData}
+                            errors={errors}
+                            onChange={handleFieldChange}
+                        />
 
-                                <div className="space-y-4">
-                                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Registration Fee (BDT)</Label>
-                                    <div className="relative">
-                                        <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            className="h-14 pl-12 bg-slate-50 border-none rounded-2xl font-black text-xl"
-                                            value={formData.fee}
-                                            onChange={(e) => setFormData({ ...formData, fee: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Button type="submit" disabled={updating} className="w-full bg-indigo-600 hover:bg-indigo-700 h-16 rounded-[2rem] font-black text-xl">
-                            {updating ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Updating...</> : 'Save Changes'}
+                        <Button
+                            type="submit"
+                            disabled={updating}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 h-16 rounded-[2rem] font-black text-xl"
+                        >
+                            {updating ? (
+                                <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Updating...</>
+                            ) : (
+                                'Save Changes'
+                            )}
                         </Button>
                     </div>
+
                 </div>
             </form>
         </div>
