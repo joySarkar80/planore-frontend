@@ -54,7 +54,7 @@ export const NAV_DATA = {
                 },
                 {
                     title: "My Events",
-                    url: "/dashboard/events",
+                    url: "/dashboard/my-events",
                     icon: Calendar,
                 },
                 {

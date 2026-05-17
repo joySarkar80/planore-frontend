@@ -37,7 +37,7 @@ export default function CreateEventPage() {
         venue: "",
         eventLink: "",
         description: "",
-        visibility: "PUBLIC",
+        visibility: "",
         fee: "0",
     });
 
@@ -316,41 +316,66 @@ export default function CreateEventPage() {
                                         Visibility
                                     </Label>
 
-                                    <Tabs
-                                        value={formData.visibility}
-                                        onValueChange={(v) =>
-                                            setFormData({
-                                                ...formData,
-                                                visibility: v,
-                                            })
-                                        }
-                                    >
-                                        <TabsList className="grid grid-cols-2 h-14 bg-slate-50 rounded-2xl">
 
-                                            <TabsTrigger
-                                                value="PUBLIC"
-                                                className="rounded-xl font-bold"
-                                            >
-                                                <Globe className="h-4 w-4 mr-2" />
-                                                Public
-                                            </TabsTrigger>
+                                    <div className="grid grid-cols-2 gap-4">
 
-                                            <TabsTrigger
-                                                value="PRIVATE"
-                                                className="rounded-xl font-bold"
-                                            >
-                                                <Lock className="h-4 w-4 mr-2" />
-                                                Private
-                                            </TabsTrigger>
-                                        </TabsList>
-                                    </Tabs>
+                                        {/* PUBLIC */}
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setFormData({
+                                                    ...formData,
+                                                    visibility: "PUBLIC",
+                                                })
+                                            }
+                                            className={`
+                h-14 rounded-2xl border transition-all duration-200
+                flex items-center justify-center gap-2 font-bold
 
-                                    <div className="text-xs text-slate-500 font-medium">
-                                        Selected:
-                                        <span className="ml-2 font-bold text-indigo-600">
-                                            {formData.visibility}
-                                        </span>
+                ${formData.visibility === "PUBLIC"
+                                                    ? "bg-indigo-600 text-white border-indigo-600"
+                                                    : "bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300"
+                                                }
+            `}
+                                        >
+                                            <Globe className="h-4 w-4" />
+                                            Public
+                                        </button>
+
+                                        {/* PRIVATE */}
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setFormData({
+                                                    ...formData,
+                                                    visibility: "PRIVATE",
+                                                })
+                                            }
+                                            className={`
+                h-14 rounded-2xl border transition-all duration-200
+                flex items-center justify-center gap-2 font-bold
+
+                ${formData.visibility === "PRIVATE"
+                                                    ? "bg-indigo-600 text-white border-indigo-600"
+                                                    : "bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300"
+                                                }
+            `}
+                                        >
+                                            <Lock className="h-4 w-4" />
+                                            Private
+                                        </button>
+
+                                        
                                     </div>
+
+                                    {
+                                        errors.visibility && (
+                                            <p className="text-sm text-red-500 font-medium">
+                                                {errors.visibility}
+                                            </p>
+                                        )
+                                    }
+
                                 </div>
 
                                 {/* FEE */}

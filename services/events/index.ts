@@ -85,7 +85,6 @@ export const getSingleEvent = async (id: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`, {
     method: 'GET',
     cache: 'no-store',
-    credentials: 'include',
   })
 
   if (!res.ok) {
@@ -94,6 +93,5 @@ export const getSingleEvent = async (id: string) => {
 
   return res.json()
 }
-
 
 
