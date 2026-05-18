@@ -41,7 +41,7 @@ export default function EditEventPage() {
         fee: "0",
     });
 
-    // মনোলিথিক স্টেট আপডেট করার জন্য একটি সেন্ট্রালাইজড হ্যান্ডলার
+
     const handleFieldChange = (field: keyof FormDataType, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }))
     }

@@ -81,17 +81,17 @@ export const getAllEvents = async (query: Record<string, any>) => {
 
 // services/index.ts
 
-export const getSingleEvent = async (id: string) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`, {
-    method: 'GET',
-    cache: 'no-store',
-  })
+// export const getSingleEvent = async (id: string) => {
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`, {
+//     method: 'GET',
+//     cache: 'no-store',
+//   })
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch single event')
-  }
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch single event')
+//   }
 
-  return res.json()
-}
+//   return res.json()
+// }
 
 

@@ -90,6 +90,9 @@ export default function MyEventCard({ event, onDeleteTrigger }: MyEventCardProps
                             <Button className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white">
                                 Manage Participants
                             </Button>
+                            <p className="text-sm font-bold text-slate-400 tracking-widest mt-2">
+                                Status: {event.status}
+                            </p>
                         </div>
                     </div>
                 </div>

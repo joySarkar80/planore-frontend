@@ -20,21 +20,27 @@ export const getMyEvents = async () => {
 
 // Get Single Event
 export const getEventById = async (id: string) => {
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`,
-        {
-            method: 'GET',
-            credentials: 'include',
-            cache: 'no-store',
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`,
+            {
+                method: 'GET',
+                cache: 'no-store',
+            }
+        );
+
+        if (!res.ok) {
+            return { success: false, data: null };
         }
-    );
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch event');
+        const result = await res.json();
+        
+        return { success: true, data: result.data };
+    } catch (error) {
+        return { success: false, data: null };
     }
-
-    return res.json();
 };
+
 
 // Update Event
 export const updateEvent = async (id: string, data: any) => {
@@ -52,7 +58,6 @@ export const updateEvent = async (id: string, data: any) => {
             }
         );
 
-        // ব্যাকএন্ড যদি কোনো এরর মেসেজ পাঠায় সেটা ধরার জন্য
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
             throw new Error(errorData.message || 'Failed to update event');
