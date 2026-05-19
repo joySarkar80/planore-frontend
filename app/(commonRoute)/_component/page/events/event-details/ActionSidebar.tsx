@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { Card, CardContent } from '@/components/ui/card'
+import { joinEvent } from '@/services/registrations/clientRegistration'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface ActionSidebarProps {
     event: {
+        id: string;
         visibility: 'PUBLIC' | 'PRIVATE';
         registrationFee: string;
         owner: {
@@ -21,6 +25,7 @@ interface ActionSidebarProps {
 }
 
 export function ActionSidebar({ event }: ActionSidebarProps) {
+    const [loading, setLoading] = React.useState(false);
     const isPaid = Number(event.registrationFee) > 0;
 
     const getButtonText = () => {
@@ -28,9 +33,34 @@ export function ActionSidebar({ event }: ActionSidebarProps) {
             return isPaid ? 'Pay and Join' : 'Join Now';
         }
         if (event.visibility === 'PRIVATE') {
-            return 'Request to Join'; 
+            return 'Request to Join';
         }
         return 'Join Event';
+    };
+
+    const handleJoinAction = async () => {
+        try {
+            setLoading(true);
+            const response = await joinEvent(event.id);
+
+            if (response.success) {
+                if (response.data?.checkoutUrl) {
+                    window.location.href = response.data.checkoutUrl;
+                } else {
+                    toast.success(response.message || 'Action completed successfully!');
+                    window.location.reload();
+                }
+            } else {
+                // alert(response.message || 'Failed to complete registration');
+                toast.error(response.message || 'Failed to complete registration');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            // alert('An unexpected error occurred');
+            toast.error('An unexpected error occurred');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -44,8 +74,13 @@ export function ActionSidebar({ event }: ActionSidebarProps) {
 
                     <Button
                         size="lg"
+                        onClick={handleJoinAction}
+                        disabled={loading}
                         className="w-full bg-indigo-600 hover:bg-indigo-700 h-14 rounded-2xl font-extrabold text-lg shadow-lg"
                     >
+                        {loading ? (
+                            <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                        ) : null}
                         {getButtonText()}
                     </Button>
                 </div>
