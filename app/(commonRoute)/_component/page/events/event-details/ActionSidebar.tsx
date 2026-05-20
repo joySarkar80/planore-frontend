@@ -48,7 +48,7 @@ export function ActionSidebar({ event }: ActionSidebarProps) {
                     window.location.href = response.data.checkoutUrl;
                 } else {
                     toast.success(response.message || 'Action completed successfully!');
-                    window.location.reload();
+                    // window.location.reload();
                 }
             } else {
                 // alert(response.message || 'Failed to complete registration');

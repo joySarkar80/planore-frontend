@@ -15,7 +15,6 @@ export default async function DashboardLayout({
       <AppSidebar role={currentUser.role} />
 
       <div className="lg:ml-64 min-h-screen">
-        {/* Top Header */}
         <header className="hidden lg:flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8">
           <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
             Dashboard Area
@@ -33,8 +32,7 @@ export default async function DashboardLayout({
         </header>
 
         <main className="p-6 md:p-10">
-          {currentUser.role === "ADMIN" && admin}
-          {currentUser.role === "USER" && user}
+          {currentUser.role === "ADMIN" ? admin : user}
         </main>
       </div>
     </div>
