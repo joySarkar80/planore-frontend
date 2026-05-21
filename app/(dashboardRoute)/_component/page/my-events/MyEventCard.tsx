@@ -82,9 +82,11 @@ export default function MyEventCard({ event, onDeleteTrigger }: MyEventCardProps
                                 <Trash2 className="h-4 w-4 mr-2" /> Delete
                             </Button>
 
-                            <Button className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white" title="Manage participants">
-                                <Users className="h-4 w-4 mr-2" /> Manage Participants
-                            </Button>
+                            <Link href={`/dashboard/my-events/participants/${event.id}`}>
+                                <Button className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white" title="Manage participants">
+                                    <Users className="h-4 w-4 mr-2" /> Manage Participants
+                                </Button>
+                            </Link>
 
                             {/* Invite User Link */}
                             <Link href={`/dashboard/my-events/invite/${event.id}`}>
