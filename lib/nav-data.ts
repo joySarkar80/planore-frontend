@@ -63,7 +63,12 @@ export const NAV_DATA = {
                     icon: Mail,
                 },
                 {
-                    title: "Reviews",
+                    title: "Join Events",
+                    url: "/dashboard/joined-events",
+                    icon: Calendar,
+                },
+                {
+                    title: "My Reviews",
                     url: "/dashboard/reviews",
                     icon: MessageSquare,
                 },

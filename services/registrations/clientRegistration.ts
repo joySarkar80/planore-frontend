@@ -54,9 +54,6 @@ export const getEventParticipantsService = async (
     }
 };
 
-/**
- * নির্দিষ্ট কোন পার্টিসিপেন্টের স্ট্যাটাস ড্রপডাউন থেকে চেঞ্জ করে আপডেট করার সার্ভিস
- */
 export const updateParticipantStatusService = async (
     registrationId: string,
     status: string
@@ -69,9 +66,42 @@ export const updateParticipantStatusService = async (
             credentials: 'include',
         });
         const data = await res.json();
-        if (!res.ok) return { success: false, message: data.message || 'স্ট্যাটাস আপডেট করা যায়নি।' };
-        return { success: true, message: data.message || 'স্ট্যাটাস সফলভাবে পরিবর্তিত হয়েছে।' };
+        if (!res.ok) return { success: false, message: data.message || 'Failed to update status.' };
+        return { success: true, message: data.message || 'Status updated successfully.' };
     } catch (error) {
-        return { success: false, message: 'নেটওয়ার্ক রিকোয়েস্ট ব্যর্থ হয়েছে।' };
+        return { success: false, message: 'Network request failed.' };
+    }
+};
+
+
+export const getMyJoinedEventsService = async () => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/registrations/my-joined-events`,
+            {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                cache: 'no-store',
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            return {
+                success: false,
+                message: data.message || 'Failed to fetch joined events',
+                data: null
+            };
+        }
+
+        return data;
+    } catch (error: any) {
+        return {
+            success: false,
+            message: 'Failed to fetch joined events',
+            data: null
+        };
     }
 };
