@@ -33,7 +33,7 @@ export default function EventDetailsPage() {
     }
 
     if (eventId) fetchEvent()
-    window.scrollTo({ top: 0, behavior: 'instant' })
+    window.scrollTo(0, 0);
   }, [eventId])
 
   if (loading) {

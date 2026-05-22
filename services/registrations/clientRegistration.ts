@@ -76,11 +76,11 @@ export const updateParticipantStatusService = async (
 
 export const getMyJoinedEventsService = async () => {
     try {
+        console.log("Fetching joined events...");
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/registrations/my-joined-events`,
             {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 cache: 'no-store',
             }
@@ -88,20 +88,27 @@ export const getMyJoinedEventsService = async () => {
 
         const data = await res.json();
 
+        console.log("Joined Events Response:", data);
+
         if (!res.ok) {
             return {
                 success: false,
-                message: data.message || 'Failed to fetch joined events',
-                data: null
+                data: [],
+                message:
+                    data.message ||
+                    'Failed to load joined events',
             };
         }
 
-        return data;
+        return {
+            success: true,
+            data: data.data || [],
+        };
     } catch (error: any) {
         return {
             success: false,
-            message: 'Failed to fetch joined events',
-            data: null
+            data: [],
+            message: 'Failed to load joined events',
         };
     }
 };
