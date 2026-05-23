@@ -1,3 +1,5 @@
+const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+
 
 export const getMyEvents = async () => {
     const res = await fetch(
@@ -42,7 +44,7 @@ export const getEventById = async (id: string) => {
 };
 
 
-// Update Event
+// edit Event
 export const updateEvent = async (id: string, data: any) => {
     try {
         const res = await fetch(
@@ -69,8 +71,9 @@ export const updateEvent = async (id: string, data: any) => {
     }
 };
 
-// Delete Event
+// Delete Event for user
 export const deleteEvent = async (id: string) => {
+    console.log('Deleting event with ID:', id); // Debug log
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/events/${id}`,
         {
@@ -85,4 +88,27 @@ export const deleteEvent = async (id: string) => {
     }
 
     return res.json();
+};
+
+// for admin to update event status
+export const UpdateEventStatus = async (
+  eventId: string,
+  status: string
+) => {
+  const res = await fetch(`${BASE}/events/${eventId}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+    credentials: 'include',
+  });
+  return res.json();
+};
+
+// for admin to delete event
+export const adminDeleteEvent = async (eventId: string) => {
+  const res = await fetch(`${BASE}/events/admin/${eventId}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+  return res.json();
 };
