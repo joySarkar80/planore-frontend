@@ -12,6 +12,7 @@ import { getUserFromToken } from '@/services/auth'
 const navLinks = [
   { name: 'Home', href: '/', icon: null },
   { name: 'Events', href: '/events', icon: Search },
+  { name: 'About', href: '/about', icon: null },
 ]
 
 export function Navbar() {
