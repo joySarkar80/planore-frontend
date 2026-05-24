@@ -1,11 +1,13 @@
 import { InvitedRegistrationType, SearchUserType } from "@/types/invite";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const searchUsersService = async (
     searchTerm: string,
     eventId: string
 ): Promise<{ success: boolean; data: SearchUserType[]; message?: string }> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/registrations/search-users?query=${encodeURIComponent(searchTerm)}&eventId=${eventId}`, {
+        const res = await fetch(`${BASE}/registrations/search-users?query=${encodeURIComponent(searchTerm)}&eventId=${eventId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include'
@@ -26,7 +28,7 @@ export const inviteUserService = async (
     email: string
 ): Promise<{ success: boolean; message: string }> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/registrations/invite`, {
+        const res = await fetch(`${BASE}/registrations/invite`, {
 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -48,7 +50,7 @@ export const getInvitedUsersService = async (
     eventId: string
 ): Promise<{ success: boolean; data: InvitedRegistrationType[]; message?: string }> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/registrations/invited?eventId=${eventId}`, {
+        const res = await fetch(`${BASE}/registrations/invited?eventId=${eventId}`, {
 
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },

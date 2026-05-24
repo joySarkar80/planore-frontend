@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-import { getEventById, updateEvent } from '@/services/events/clientEvent'
+import { getEventById, updateEvent } from '@/services/events'
 import EventDetailsForm from '../../../../_component/page/edit-event/EventDetailsForm'
 import EventSettingsForm from '../../../../_component/page/edit-event/EventSettingsForm'
 

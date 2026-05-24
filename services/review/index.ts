@@ -1,6 +1,8 @@
+const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const createReviewService = async (reviewData: { eventId: string; rating: number; comment?: string }) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews`, {
+        const res = await fetch(`${BASE}/reviews`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +33,7 @@ export const createReviewService = async (reviewData: { eventId: string; rating:
 
 export const getMyReviewsService = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/my-reviews`, {
+        const res = await fetch(`${BASE}/reviews/my-reviews`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -44,7 +46,7 @@ export const getMyReviewsService = async () => {
 
 export const updateReviewService = async (reviewId: string, payload: { rating?: number; comment?: string }) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${reviewId}`, {
+        const res = await fetch(`${BASE}/reviews/${reviewId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -59,7 +61,7 @@ export const updateReviewService = async (reviewId: string, payload: { rating?: 
 
 export const deleteReviewService = async (reviewId: string) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${reviewId}`, {
+        const res = await fetch(`${BASE}/reviews/${reviewId}`, {
             method: 'DELETE',
             credentials: 'include',
         });

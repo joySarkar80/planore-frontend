@@ -6,7 +6,7 @@ import { Plus, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 
-import { getMyEvents, deleteEvent } from '@/services/events/clientEvent'
+import { getMyEvents, deleteEvent } from '@/services/events'
 import MyEventCard, { EventType } from '../../../_component/page/my-events/MyEventCard'
 import DeleteConfirmModal from '../../../_component/page/my-events/DeleteConfirmModal'
 

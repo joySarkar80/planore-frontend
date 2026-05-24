@@ -1,9 +1,11 @@
 import { ParticipantType } from "@/types/registration";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const joinEvent = async (eventId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/registrations/join/${eventId}`,
+            `${BASE}/registrations/join/${eventId}`,
             {
                 method: 'POST',
                 credentials: 'include',
@@ -22,7 +24,7 @@ export const joinEvent = async (eventId: string) => {
 export const payPrivateEvent = async (eventId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/registrations/pay/${eventId}`,
+            `${BASE}/registrations/pay/${eventId}`,
             {
                 method: 'POST',
                 credentials: 'include',
@@ -41,7 +43,7 @@ export const getEventParticipantsService = async (
     eventId: string
 ): Promise<{ success: boolean; data: ParticipantType[]; message?: string }> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/registrations/participants?eventId=${eventId}`, {
+        const res = await fetch(`${BASE}/registrations/participants?eventId=${eventId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -59,7 +61,7 @@ export const updateParticipantStatusService = async (
     status: string
 ): Promise<{ success: boolean; message: string }> => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/registrations/participants/${registrationId}/status`, {
+        const res = await fetch(`${BASE}/registrations/participants/${registrationId}/status`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
@@ -78,7 +80,7 @@ export const getMyJoinedEventsService = async () => {
     try {
         console.log("Fetching joined events...");
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/registrations/my-joined-events`,
+            `${BASE}/registrations/my-joined-events`,
             {
                 method: 'GET',
                 credentials: 'include',

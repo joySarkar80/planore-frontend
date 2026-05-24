@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { adminDeleteEvent, UpdateEventStatus, getAdminEvents } from '@/services/events/clientEvent';
+import { adminDeleteEvent, getAllEventsForAdmin, UpdateEventStatus } from '@/services/events';
 import { setFeaturedEvent } from '@/services/featuredEvent';
 
 // Imorting breakdown components
@@ -46,7 +46,7 @@ export default function AllEventsContainer() {
                 limit: 20
             };
 
-            const json = await getAdminEvents(queryParams);
+            const json = await getAllEventsForAdmin(queryParams);
 
             if (json.success) {
                 const rows: AdminEvent[] = json.data.data;

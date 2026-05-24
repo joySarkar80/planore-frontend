@@ -68,13 +68,13 @@ export default function EventSettingsForm({ formData, errors, onChange }: EventS
                 </div>
 
                 {/* IMAGE BANNER PLACEHOLDER */}
-                <div className="space-y-4">
+                {/* <div className="space-y-4">
                     <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Event Banner</Label>
                     <div className="aspect-video rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400">
                         <ImageIcon className="h-8 w-8 mb-2" />
                         <span className="text-xs font-bold">Coming Soon</span>
                     </div>
-                </div>
+                </div> */}
             </div>
         </Card>
     )

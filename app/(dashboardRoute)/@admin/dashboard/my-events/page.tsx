@@ -6,7 +6,7 @@ import { Plus, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 
-import { getMyEvents, deleteEvent } from '@/services/events/clientEvent'
+import { getMyEvents, deleteEvent } from '@/services/events'
 import MyEventCard, { EventType } from '../../../_component/page/my-events/MyEventCard'
 import DeleteConfirmModal from '../../../_component/page/my-events/DeleteConfirmModal'
 
@@ -42,7 +42,7 @@ export default function MyEventsPage() {
 
       if (res.success) {
         toast.success('Event deleted successfully')
-        // Optimistic UI update: রিলোড ছাড়া সরাসরি স্টেট থেকে বাদ দেওয়া
+        // Optimistic UI update:
         setEvents((prev) => prev.filter((event) => event.id !== eventToDelete))
       }
     } catch (error: any) {

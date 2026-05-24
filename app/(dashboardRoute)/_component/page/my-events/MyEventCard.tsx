@@ -26,51 +26,65 @@ type MyEventCardProps = {
 
 export default function MyEventCard({ event, onDeleteTrigger }: MyEventCardProps) {
     return (
-        <Card className="overflow-hidden border-slate-200/60 hover:shadow-md transition-shadow rounded-2xl">
+        <Card className="overflow-hidden rounded-2xl border border-slate-200/60 hover:shadow-lg transition-all duration-300">
             <CardContent className="p-0">
-                <div className="flex flex-col md:flex-row">
-                    <div className="relative w-full md:w-64 h-52 shrink-0">
-                        <Image
-                            src={event.imageUrl || 'https://images.unsplash.com/photo-1511578314322-379afb476865'}
-                            alt={event.title}
-                            fill
-                            className="object-cover"
-                        />
-                        <div className="absolute top-4 left-4">
-                            <Badge className="bg-white text-slate-900 font-bold">
+                <div className="flex flex-col">
+                    <div className="flex-1 p-6 md:p-8">
+                        <div>
+                            <Badge
+                                variant="secondary"
+                                className="mb-3 w-fit rounded-full px-3 py-1 font-bold"
+                            >
                                 {event.visibility}
                             </Badge>
-                        </div>
-                    </div>
-                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                        <div>
-                            <div className="flex items-start justify-between mb-4">
+
+                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                                 <div>
-                                    <h2 className="text-2xl font-black text-slate-900">{event.title}</h2>
-                                    <div className="flex items-center gap-4 text-sm text-slate-500 font-semibold mt-2">
+                                    <h2 className="text-2xl font-black text-slate-900 break-words">
+                                        {event.title}
+                                    </h2>
+
+                                    <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 font-semibold mt-2">
                                         <span className="flex items-center gap-1">
                                             <Calendar className="h-4 w-4 text-indigo-500" />
                                             {new Date(event.startAt).toLocaleDateString()}
                                         </span>
+
                                         <span className="flex items-center gap-1">
                                             <Users className="h-4 w-4 text-indigo-500" />
                                             {event.registrations?.length || 0} Participants
                                         </span>
+
+                                        <span className="text-slate-400">
+                                            Status:{" "}
+                                            <span className="font-bold text-slate-700">
+                                                {event.status}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <p className="text-slate-500 line-clamp-2">{event.description}</p>
+
+                            <p className="text-slate-500 leading-relaxed line-clamp-2">
+                                {event.description}
+                            </p>
                         </div>
 
                         <div className="flex flex-wrap gap-3 mt-6">
                             <Link href={`/events/${event.id}`}>
                                 <Button className="rounded-xl font-bold bg-slate-800 hover:bg-slate-950 text-white">
-                                    <ExternalLink className="h-4 w-4 mr-2" /> View
+                                    <ExternalLink className="h-4 w-4 mr-2" />
+                                    View
                                 </Button>
                             </Link>
+
                             <Link href={`/dashboard/edit-event/${event.id}`}>
-                                <Button className="rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700" title="Edit event details">
-                                    <Edit2 className="h-4 w-4 mr-2" /> Edit
+                                <Button
+                                    className="rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700"
+                                    title="Edit event details"
+                                >
+                                    <Edit2 className="h-4 w-4 mr-2" />
+                                    Edit
                                 </Button>
                             </Link>
 
@@ -79,42 +93,43 @@ export default function MyEventCard({ event, onDeleteTrigger }: MyEventCardProps
                                 onClick={() => onDeleteTrigger(event.id)}
                                 className="rounded-xl font-bold bg-red-600 hover:bg-red-700 text-white"
                             >
-                                <Trash2 className="h-4 w-4 mr-2" /> Delete
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
                             </Button>
 
                             <Link href={`/dashboard/my-events/participants/${event.id}`}>
-                                <Button className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white" title="Manage participants">
-                                    <Users className="h-4 w-4 mr-2" /> Manage Participants
+                                <Button
+                                    className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white"
+                                    title="Manage participants"
+                                >
+                                    <Users className="h-4 w-4 mr-2" />
+                                    Participants
                                 </Button>
                             </Link>
 
-                            {/* Invite User Link */}
                             <Link href={`/dashboard/my-events/invite/${event.id}`}>
                                 <Button
                                     title="Invite user to join this event"
                                     className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
                                 >
-                                    <UserPlus className="h-4 w-4 mr-2" /> Invite User
+                                    <UserPlus className="h-4 w-4 mr-2" />
+                                    Invite User
                                 </Button>
                             </Link>
 
-                            {/* Invited Users Link */}
                             <Link href={`/dashboard/my-events/invited/${event.id}`}>
                                 <Button
                                     title="List of users invited so far"
                                     className="rounded-xl font-bold bg-purple-600 hover:bg-purple-700 text-white"
                                 >
-                                    <MailCheck className="h-4 w-4 mr-2" /> Invited Users
+                                    <MailCheck className="h-4 w-4 mr-2" />
+                                    Invited Users
                                 </Button>
                             </Link>
-
-                            <p className="text-sm font-bold text-slate-400 tracking-widest mt-2">
-                                Status: {event.status}
-                            </p>
                         </div>
                     </div>
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }

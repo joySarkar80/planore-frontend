@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { EventInfo } from '../../_component/page/events/event-details/EventInfo'
 import { ActionSidebar } from '../../_component/page/events/event-details/ActionSidebar'
-import { getEventById } from '@/services/events/clientEvent'
+import { getEventById } from '@/services/events'
 
 export default function EventDetailsPage() {
   const params = useParams()

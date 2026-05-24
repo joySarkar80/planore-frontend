@@ -3,10 +3,11 @@
 import * as React from 'react'
 import { Search, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { getAllEvents } from '@/services/events'
+
 import { EventSearch } from './EventSearch'
 import { EventFilters } from './EventFilters'
 import { EventCard } from './EventCard'
+import { getAllEvents } from '@/services/events'
 
 export default function EventsContainer() {
     const [searchQuery, setSearchQuery] = React.useState('')

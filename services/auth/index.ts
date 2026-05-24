@@ -2,9 +2,11 @@
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const loginUser = async (userData: { email: string; password: string }) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, {
+        const res = await fetch(`${BASE}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -51,7 +53,7 @@ export const registerUser = async (data: {
     email: string;
     password: string;
 }) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`, {
+    const res = await fetch(`${BASE}/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

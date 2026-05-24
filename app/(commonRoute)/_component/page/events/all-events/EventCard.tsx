@@ -8,8 +8,8 @@ import Image from 'next/image'
 export const EventCard = ({ event }: { event: any }) => {
     return (
         <Card className="group hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white rounded-2xl">
-            <div className="relative aspect-[16/9] overflow-hidden">
-                <Image
+            <div className="relative overflow-hidden">
+                {/* <Image
                     src={event.imageUrl || "https://picsum.photos/seed/picsum/800/450"}
                     alt={event.title}
                     fill
@@ -17,7 +17,7 @@ export const EventCard = ({ event }: { event: any }) => {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     priority
                     unoptimized
-                />
+                /> */}
                 <div className="absolute top-4 left-4">
                     <Badge className="bg-white/90 text-slate-900 font-bold backdrop-blur-sm border-none shadow-sm">
                         {event.visibility} {Number(event.registrationFee) === 0 ? "Free" : "Paid"}

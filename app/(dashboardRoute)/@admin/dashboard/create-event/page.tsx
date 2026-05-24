@@ -23,7 +23,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { createEvent } from '@/services/events'
+import { createEvent } from '@/services/events';
+
 
 export default function CreateEventPage() {
     const router = useRouter()
@@ -365,7 +366,7 @@ export default function CreateEventPage() {
                                             Private
                                         </button>
 
-                                        
+
                                     </div>
 
                                     {
@@ -411,7 +412,7 @@ export default function CreateEventPage() {
                                 </div>
 
                                 {/* IMAGE PLACEHOLDER */}
-                                <div className="space-y-4">
+                                {/* <div className="space-y-4">
                                     <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">
                                         Event Banner
                                     </Label>
@@ -422,7 +423,7 @@ export default function CreateEventPage() {
                                             Coming Soon
                                         </span>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </Card>
 
