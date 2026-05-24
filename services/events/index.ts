@@ -48,11 +48,11 @@ export const getUpcomingEvents = async (): Promise<PublicEvent[]> => {
     try {
         const res = await fetch(
             `${BASE}/events?limit=9&upcoming=true&visibility=PUBLIC`,
-            { next: { revalidate: 60, tags: ['events'] } }
+            { next: { revalidate: 10, tags: ['events'] } }
         );
         if (!res.ok) return [];
         const json = await res.json();
-        return json.data?.data ?? [];
+        return json.data ?? [];
     } catch {
         return [];
     }
