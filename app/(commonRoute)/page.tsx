@@ -2,6 +2,7 @@ import { getUpcomingEvents } from '@/services/events';
 import HeroSection from './_component/page/home/HeroSection';
 import { getFeaturedEvent } from '@/services/featuredEvent';
 import UpcomingEventsSlider from './_component/page/home/UpcomingEventsSlider';
+import CategorySection from './_component/page/home/CategorySection';
 
 export default async function HomePage() {
   // Parallel data fetching
@@ -16,6 +17,8 @@ export default async function HomePage() {
       <HeroSection featured={featured} />
 
       <UpcomingEventsSlider events={upcomingEvents} />
+
+      <CategorySection />
     </div>
   );
 }

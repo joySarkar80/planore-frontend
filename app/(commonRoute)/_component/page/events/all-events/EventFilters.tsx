@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 interface EventFiltersProps {
     activeTab: string;
-    setActiveTab: (tab: string) => void;
+    setActiveTab: (tab: any) => void;
     categories: string[];
 }
 
@@ -23,11 +23,11 @@ export const EventFilters = ({ activeTab, setActiveTab, categories }: EventFilte
                             className={cn(
                                 "relative px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300",
                                 "focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2",
-                                
+
                                 "text-slate-600 hover:text-slate-900 hover:bg-slate-300/50",
 
                                 isActive && [
-                                    "bg-indigo-600 text-white shadow-lg scale-105", 
+                                    "bg-indigo-600 text-white shadow-lg scale-105",
                                     "ring-2 ring-indigo-600 ring-offset-2"
                                 ]
                             )}
