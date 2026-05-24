@@ -34,7 +34,7 @@ export const NAV_DATA = {
                     icon: Calendar,
                 },
                 {
-                    title: "My Events",
+                    title: "My created Events",
                     url: "/dashboard/my-events",
                     icon: Calendar,
                 },
@@ -44,7 +44,7 @@ export const NAV_DATA = {
                     icon: Mail,
                 },
                 {
-                    title: "Join Events",
+                    title: "Joined Events",
                     url: "/dashboard/joined-events",
                     icon: Calendar,
                 },
@@ -73,7 +73,7 @@ export const NAV_DATA = {
                     icon: Calendar,
                 },
                 {
-                    title: "My Events",
+                    title: "My created Events",
                     url: "/dashboard/my-events",
                     icon: Calendar,
                 },
@@ -83,7 +83,7 @@ export const NAV_DATA = {
                     icon: Mail,
                 },
                 {
-                    title: "Join Events",
+                    title: "Joined Events",
                     url: "/dashboard/joined-events",
                     icon: Calendar,
                 },

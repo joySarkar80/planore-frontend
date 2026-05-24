@@ -11,29 +11,37 @@ export function JoinedEventRow({ registration, onRefresh }: { registration: any;
     const { event, status, paymentStatus } = registration;
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-    const [loading, setLoading] = useState(false); // Changed to 'loading' to match ActionSidebar
+    const [loading, setLoading] = useState(false);
 
     const isApproved = status === 'APPROVED';
-    const isPending = status === 'PENDING';
-
     const isPrivatePaidEvent = event.visibility === 'PRIVATE' && Number(event.registrationFee) > 0;
     const hasPaid = paymentStatus === 'PAID';
 
     const eventStartTime = new Date(event.startAt).getTime();
     const currentTime = new Date().getTime();
     const minutesPassed = (currentTime - eventStartTime) / (1000 * 60);
-    const is3MinutesPassed = minutesPassed >= 3;
+    const is3MinutesPassed = minutesPassed >= 1;
 
     const existingReview = event.reviews?.length > 0 ? event.reviews[0] : null;
     const hasReviewed = !!existingReview;
 
-    const canLeaveReview = isApproved && (!isPrivatePaidEvent || hasPaid) && is3MinutesPassed;
     const showPayButton = isPrivatePaidEvent && !hasPaid;
-    const isPayButtonDisabled = isPending || !isApproved || loading;
 
-    // ==========================================================
-    // Exactly matching ActionSidebar architecture
-    // ==========================================================
+    const handleReviewClick = () => {
+        if (hasReviewed) {
+            setIsReviewModalOpen(true);
+            return;
+        }
+
+        if (!is3MinutesPassed) {
+            toast.error("Reviews cannot be submitted at this moment. You can submit a review 2 minutes after the event starts.");
+            return;
+        }
+
+        
+        setIsReviewModalOpen(true);
+    };
+
     const handlePrivatePayment = async (eventId: string) => {
         try {
             setLoading(true);
@@ -45,12 +53,10 @@ export function JoinedEventRow({ registration, onRefresh }: { registration: any;
             }
 
             toast.error(response.message || 'Failed to initialize payment');
-
             setLoading(false);
 
         } catch (error) {
             toast.error('Something went wrong');
-
             setLoading(false);
         }
     };
@@ -92,7 +98,6 @@ export function JoinedEventRow({ registration, onRefresh }: { registration: any;
 
                     {showPayButton && (
                         <button
-                            // disabled={isPayButtonDisabled}
                             onClick={() => handlePrivatePayment(event.id)}
                             className="flex items-center gap-1 px-3 py-1.5 text-sm font-semibold text-white bg-slate-900 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-800 transition"
                         >
@@ -103,16 +108,15 @@ export function JoinedEventRow({ registration, onRefresh }: { registration: any;
 
                     {hasReviewed ? (
                         <button
-                            onClick={() => setIsReviewModalOpen(true)}
+                            onClick={handleReviewClick}
                             className="px-3 py-1.5 text-sm font-semibold text-purple-600 border border-purple-200 bg-purple-50 hover:bg-purple-100 rounded-lg transition"
                         >
                             View Your Review
                         </button>
                     ) : (
                         <button
-                            disabled={!canLeaveReview}
-                            onClick={() => setIsReviewModalOpen(true)}
-                            className="px-3 py-1.5 text-sm font-semibold text-indigo-600 border border-indigo-200 bg-indigo-50 rounded-lg disabled:opacity-40 disabled:bg-slate-50 disabled:cursor-not-allowed hover:bg-slate-50 transition"
+                            onClick={handleReviewClick}
+                            className="px-3 py-1.5 text-sm font-semibold text-indigo-600 border border-indigo-200 bg-indigo-50 rounded-lg hover:bg-slate-50 transition"
                         >
                             Leave a Review
                         </button>

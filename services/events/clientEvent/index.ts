@@ -36,7 +36,7 @@ export const getEventById = async (id: string) => {
         }
 
         const result = await res.json();
-        
+
         return { success: true, data: result.data };
     } catch (error) {
         return { success: false, data: null };
@@ -92,23 +92,49 @@ export const deleteEvent = async (id: string) => {
 
 // for admin to update event status
 export const UpdateEventStatus = async (
-  eventId: string,
-  status: string
+    eventId: string,
+    status: string
 ) => {
-  const res = await fetch(`${BASE}/events/${eventId}/status`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status }),
-    credentials: 'include',
-  });
-  return res.json();
+    const res = await fetch(`${BASE}/events/${eventId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+        credentials: 'include',
+    });
+    return res.json();
 };
 
 // for admin to delete event
 export const adminDeleteEvent = async (eventId: string) => {
-  const res = await fetch(`${BASE}/events/admin/${eventId}`, {
-    method: 'DELETE',
-    credentials: 'include',
-  });
-  return res.json();
+    const res = await fetch(`${BASE}/events/admin/${eventId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+    });
+    return res.json();
+};
+
+// Fetch Admin Events
+export const getAdminEvents = async (query: Record<string, any>) => {
+    const params = new URLSearchParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+        if (value !== undefined && value !== "" && value !== null) {
+            params.append(key, String(value));
+        }
+    });
+
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/events/admin?${params.toString()}`,
+        {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch admin events');
+    }
+
+    return res.json();
 };

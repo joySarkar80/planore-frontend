@@ -88,7 +88,7 @@ export default function CreateEventPage() {
                 return;
             }
 
-            toast.success("Event created successfully");
+            toast.success(result.message);
 
             setFormData({
                 title: "",
@@ -97,7 +97,7 @@ export default function CreateEventPage() {
                 venue: "",
                 eventLink: "",
                 description: "",
-                visibility: "PUBLIC",
+                visibility: "",
                 fee: "0",
             });
 

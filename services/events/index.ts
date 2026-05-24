@@ -39,6 +39,7 @@ export const createEvent = async (payload: ICreateEvent) => {
   return {
     success: true,
     data: data.data,
+    message: data.message,
   };
 };
 
@@ -62,7 +63,7 @@ export const getAllEvents = async (query: Record<string, any>) => {
         "Content-Type": "application/json",
       },
       next: {
-        revalidate: 60,
+        revalidate: 5,
         tags: ["events"],
       },
     });
