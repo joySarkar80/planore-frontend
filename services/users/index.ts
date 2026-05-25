@@ -1,5 +1,28 @@
 const BASE = process.env.NEXT_PUBLIC_BASE_URL;
 
+export type UpcomingRegistration = {
+    id: string;
+    paymentStatus: string;
+    event: {
+        id: string;
+        title: string;
+        startAt: string;
+        visibility: 'PUBLIC' | 'PRIVATE';
+        registrationFee: string;
+        venue: string | null;
+    };
+};
+
+export type MyProfile = {
+    id: string;
+    name: string;
+    email: string;
+    avatar: string | null;
+    role: string;
+    createdAt: string;
+    registrations: UpcomingRegistration[];
+};
+
 export const updateUserStatus = async (
     userId: string,
     status: string
@@ -30,6 +53,33 @@ export const getAllUsers = async (page: number, search?: string) => {
     const res = await fetch(`${BASE}/users/all?${params}`, {
         credentials: 'include',
         cache: 'no-store',
+    });
+    return res.json();
+};
+
+export const getMyProfile = async (): Promise<MyProfile | null> => {
+    try {
+        const res = await fetch(`${BASE}/users/me`, {
+            credentials: 'include',
+            cache: 'no-store',
+        });
+        if (!res.ok) return null;
+        const json = await res.json();
+        return json.data ?? null;
+    } catch {
+        return null;
+    }
+};
+
+export const updateMyProfile = async (payload: {
+    name?: string;
+    avatar?: string;
+}) => {
+    const res = await fetch(`${BASE}/users/me`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        credentials: 'include',
     });
     return res.json();
 };

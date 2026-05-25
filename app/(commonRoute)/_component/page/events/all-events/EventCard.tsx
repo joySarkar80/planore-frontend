@@ -30,9 +30,14 @@ export const EventCard = ({ event }: { event: any }) => {
                         <Calendar className="h-3 w-3 mr-1" />
                         {new Date(event.startAt).toLocaleDateString()}
                     </div>
-                    <Badge variant="secondary" className="bg-indigo-50 text-indigo-600">
-                        {Number(event.registrationFee) === 0 ? "Free" : `$${event.registrationFee}`}
-                    </Badge>
+                    <div>
+                        <Badge variant="secondary" className="bg-indigo-50 text-indigo-600">
+                            {event.visibility}
+                        </Badge>
+                        <Badge variant="secondary" className="bg-indigo-50 text-indigo-600">
+                            {Number(event.registrationFee) === 0 ? "Free" : `$${event.registrationFee}`}
+                        </Badge>
+                    </div>
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-3 line-clamp-1">
                     {event.title}

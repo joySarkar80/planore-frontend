@@ -14,9 +14,10 @@ interface NavMainProps {
       icon: any;
     }[];
   };
+  onClose?: () => void; 
 }
 
-export function NavMain({ section }: NavMainProps) {
+export function NavMain({ section, onClose }: NavMainProps) {
   const pathname = usePathname();
 
   return (
@@ -37,6 +38,7 @@ export function NavMain({ section }: NavMainProps) {
             <Link
               key={item.title}
               href={item.url}
+              onClick={onClose} 
               className={cn(
                 "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all",
                 isActive
@@ -50,7 +52,6 @@ export function NavMain({ section }: NavMainProps) {
                   isActive ? "text-indigo-600" : "text-slate-400"
                 )}
               />
-
               <span>{item.title}</span>
             </Link>
           );
