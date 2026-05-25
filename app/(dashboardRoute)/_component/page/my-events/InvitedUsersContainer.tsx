@@ -119,7 +119,7 @@ export default function InvitedUsersContainer({ eventId }: InvitedUsersContainer
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
-                                            Invited and current status is {getStatusBadge(invite.status)}
+                                            Invited and event join status is {getStatusBadge(invite.status)}
                                         </td>
                                     </tr>
                                 ))

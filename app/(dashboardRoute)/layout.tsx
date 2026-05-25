@@ -10,6 +10,8 @@ export default async function DashboardLayout({
 }) {
   const currentUser = await getUserFromToken();
 
+  // console.log("Current User:", currentUser);
+
   return (
     <div className="min-h-screen bg-slate-50">
       <AppSidebar role={currentUser.role} />
@@ -20,7 +22,7 @@ export default async function DashboardLayout({
             Dashboard Area
           </h2>
 
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">
               {currentUser.name?.slice(0, 2).toUpperCase()}
             </div>
@@ -28,7 +30,7 @@ export default async function DashboardLayout({
             <span className="text-sm font-semibold text-slate-700">
               {currentUser.name}
             </span>
-          </div>
+          </div> */}
         </header>
 
         <main className="p-6 md:p-10">
