@@ -1,8 +1,8 @@
 'use client';
 
-type FilterStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+type FilterStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'UPCOMING' | 'PAST';
 
-const STATUS_OPTIONS: FilterStatus[] = ['PENDING', 'APPROVED', 'REJECTED'];
+const STATUS_OPTIONS: FilterStatus[] = ['PENDING', 'APPROVED', 'REJECTED', 'UPCOMING', 'PAST'];
 
 interface EventFiltersProps {
     search: string;
@@ -31,7 +31,7 @@ export default function EventFilters({
                 onChange={(e) => onStatusChange(e.target.value)}
                 className="cursor-pointer border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-                <option className='cursor-pointer' value="">All Statuses</option>
+                <option className='cursor-pointer' value="">All Events</option>
                 {STATUS_OPTIONS.map((s) => (
                     <option key={s} value={s}>{s}</option>
                 ))}

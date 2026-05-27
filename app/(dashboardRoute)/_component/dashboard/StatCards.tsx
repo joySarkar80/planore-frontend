@@ -18,7 +18,7 @@ const STATS = (upcoming: number | null, registrations: number | null) => [
     },
     {
         name: 'Total Registrations',
-        header: 'Upcoming Events Registrations',
+        header: 'Upcoming All Events Registrations',
         value: registrations !== null ? String(registrations) : '—',
         icon: Users,
         color: 'text-indigo-600',

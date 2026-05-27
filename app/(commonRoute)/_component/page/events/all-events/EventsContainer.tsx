@@ -66,7 +66,7 @@ export default function EventsContainer() {
         setLoading(true)
         try {
             const filters = filtersFromTab(activeTab)
-            const res = await getAllEvents({ search: searchQuery, ...filters })
+            const res = await getAllEvents({ search: searchQuery, upcoming: 'true', ...filters })
             setEvents(res?.data?.data ?? res?.data ?? [])
         } catch {
             setEvents([])

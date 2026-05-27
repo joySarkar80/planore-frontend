@@ -22,6 +22,7 @@ export const setFeaturedEvent = async (eventId: string) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ eventId }),
     credentials: 'include',
+
   });
   return res.json();
 };
@@ -29,7 +30,7 @@ export const setFeaturedEvent = async (eventId: string) => {
 export const getFeaturedEvent = async (): Promise<FeaturedEventData | null> => {
   try {
     const res = await fetch(`${BASE}/featured-events`, {
-      next: { revalidate: 30, tags: ['featured-event'] },
+      next: { revalidate: 10, tags: ['featured-event'] },
     });
     if (!res.ok) return null;
     const json = await res.json();

@@ -9,10 +9,12 @@ import { setFeaturedEvent } from '@/services/featuredEvent';
 import EventFilters from './EventFilters';
 import EventsTable, { AdminEvent, EventStatus } from './EventsTable';
 import DeleteEventModal from './DeleteEventModal';
+import { useRouter } from 'next/navigation';
 
 type DeleteModalState = { open: boolean; eventId: string | null; title: string };
 
 export default function AllEventsContainer() {
+    const router = useRouter();
     const [events, setEvents] = useState<AdminEvent[]>([]);
     const [loading, setLoading] = useState(true);
     const [statusMap, setStatusMap] = useState<Record<string, EventStatus>>({});
@@ -115,14 +117,23 @@ export default function AllEventsContainer() {
         try {
             const res = await setFeaturedEvent(id);
             if (res.success) {
+                try {
+                    await fetch('/api/revalidate', { method: 'POST' });
+                } catch (err) {
+                    console.error("Revalidation failed:", err);
+                }
                 toast.success('Event set as featured');
                 await fetchEvents();
             } else {
                 toast.error(res.message || 'Failed');
             }
-        } catch { toast.error('Something went wrong'); }
-        finally { setFeaturingId(null); }
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setFeaturingId(null);
+        }
     };
+
 
     return (
         <div className="p-6 max-w-full">

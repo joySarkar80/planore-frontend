@@ -80,7 +80,7 @@ export default function UsersTable({
                                             />
                                         ) : (
                                             <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 flex-shrink-0">
-                                                {user.name.charAt(0).toUpperCase()}
+                                                {user.name ? user.name.trim().charAt(0).toUpperCase() : 'U'}
                                             </div>
                                         )}
                                         <span className="font-medium text-gray-900 whitespace-nowrap">{user.name}</span>

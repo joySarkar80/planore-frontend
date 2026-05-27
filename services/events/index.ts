@@ -44,7 +44,9 @@ export const createEvent = async (payload: ICreateEvent) => {
     };
 };
 
+// for home page. this fetch use in event slider.
 export const getUpcomingEvents = async (): Promise<PublicEvent[]> => {
+    console.log("clicked")
     try {
         const res = await fetch(
             `${BASE}/events?limit=9&upcoming=true&visibility=PUBLIC`,
@@ -58,6 +60,7 @@ export const getUpcomingEvents = async (): Promise<PublicEvent[]> => {
     }
 };
 
+// public route for events page.
 export const getAllEvents = async (query: Record<string, any>) => {
     try {
         const params = new URLSearchParams();
@@ -93,22 +96,30 @@ export const getAllEvents = async (query: Record<string, any>) => {
     }
 };
 
-export const getMyEvents = async () => {
+export const getMyEvents = async (query: Record<string, any>) => {
+    const params = new URLSearchParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+        if (value !== undefined && value !== '' && value !== null) {
+            params.append(key, String(value));
+        }
+    });
+
     const res = await fetch(
-        `${BASE}/events/my-events`,
+        `${BASE}/events/my-events?${params.toString()}`,
         {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store',
         }
-    )
+    );
 
     if (!res.ok) {
-        throw new Error('Failed to fetch events')
+        throw new Error('Failed to fetch events');
     }
 
-    return res.json()
-}
+    return res.json();
+};
 
 // path: src/services/events/clientEvent.ts
 
@@ -205,7 +216,7 @@ export const adminDeleteEvent = async (eventId: string) => {
     return res.json();
 };
 
-// Fetch Admin Events
+// Fetch all events for Admin
 export const getAllEventsForAdmin = async (query: Record<string, any>) => {
     const params = new URLSearchParams();
 

@@ -76,11 +76,12 @@ export const updateParticipantStatusService = async (
 };
 
 
-export const getMyJoinedEventsService = async () => {
+export const getMyJoinedEventsService = async (
+    filter: 'ALL EVENTS' | 'UPCOMING' | 'PAST' = 'ALL EVENTS'
+) => {
     try {
-        console.log("Fetching joined events...");
         const res = await fetch(
-            `${BASE}/registrations/my-joined-events`,
+            `${BASE}/registrations/my-joined-events?filter=${filter}`,
             {
                 method: 'GET',
                 credentials: 'include',
@@ -90,15 +91,11 @@ export const getMyJoinedEventsService = async () => {
 
         const data = await res.json();
 
-        console.log("Joined Events Response:", data);
-
         if (!res.ok) {
             return {
                 success: false,
                 data: [],
-                message:
-                    data.message ||
-                    'Failed to load joined events',
+                message: data.message || 'Failed to load joined events',
             };
         }
 
@@ -106,7 +103,7 @@ export const getMyJoinedEventsService = async () => {
             success: true,
             data: data.data || [],
         };
-    } catch (error: any) {
+    } catch {
         return {
             success: false,
             data: [],

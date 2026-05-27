@@ -44,6 +44,7 @@ export const deleteUser = async (userId: string) => {
     return res.json();
 };
 
+// get all users for admin..
 export const getAllUsers = async (page: number, search?: string) => {
     const params = new URLSearchParams();
     if (search) params.append('searchTerm', search);

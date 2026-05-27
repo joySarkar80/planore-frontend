@@ -6,7 +6,7 @@ import { RecentEventType } from '@/services/dashboard';
 import { formatDate } from './helpers';
 
 
-type RecentEventsTableProps = {
+type NewEventsTableProps = {
     events: RecentEventType[];
     loading: boolean;
 };
@@ -24,13 +24,17 @@ function StatusBadge({ status }: { status: string }) {
     );
 }
 
-function VisibilityBadge({ visibility }: { visibility: string }) {
+function VisibilityBadge({ visibility, registrationFee }: { visibility: string; registrationFee: string | number }) {
+    const feeStatus = Number(registrationFee) === 0 ? 'Free' : 'Paid';
+    const visibilityText = visibility.charAt(0) + visibility.slice(1).toLowerCase();
+
     return (
-        <span className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-[10px] font-bold uppercase border border-indigo-100">
-            {visibility.charAt(0) + visibility.slice(1).toLowerCase()}
+        <span className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-[10px] font-bold uppercase border border-indigo-100 whitespace-nowrap">
+            {visibilityText} - {feeStatus}
         </span>
     );
 }
+
 
 function SkeletonRows() {
     return (
@@ -48,18 +52,13 @@ function SkeletonRows() {
     );
 }
 
-export default function RecentEventsTable({ events, loading }: RecentEventsTableProps) {
+export default function NewEventsTable({ events, loading }: NewEventsTableProps) {
     return (
         <Card className="lg:col-span-2 border-slate-200/60 bg-white overflow-hidden rounded-2xl shadow-sm">
             <CardHeader className="border-b border-slate-50 p-6 flex flex-row items-center justify-between">
                 <CardTitle className="text-xl font-extrabold text-slate-900">
-                    Recently Created Events Of Last One Week
+                    New Events Waiting For Admin Approval
                 </CardTitle>
-                <Link href="/dashboard/my-events">
-                    <Button variant="ghost" size="sm" className="text-indigo-600 font-bold hover:text-indigo-700 hover:bg-indigo-50">
-                        View All
-                    </Button>
-                </Link>
             </CardHeader>
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -83,7 +82,6 @@ export default function RecentEventsTable({ events, loading }: RecentEventsTable
                             </tr>
                         ) : (
                             events.map((event) => (
-                                console.log(event),
                                 <tr key={event.id} className="hover:bg-slate-50/50 transition-colors">
                                     <td className="px-6 py-5 font-bold text-slate-900 max-w-[200px] truncate">
                                         {event.title}
@@ -95,7 +93,9 @@ export default function RecentEventsTable({ events, loading }: RecentEventsTable
                                         {formatDate(event.startAt)}
                                     </td>
                                     <td className="px-6 py-5">
-                                        <VisibilityBadge visibility={event.visibility} />
+                                        <div className="flex items-center">
+                                            <VisibilityBadge visibility={event.visibility} registrationFee={event.registrationFee} />
+                                        </div>
                                     </td>
                                     <td className="px-6 py-5">
                                         <StatusBadge status={event.status} />
@@ -112,6 +112,18 @@ export default function RecentEventsTable({ events, loading }: RecentEventsTable
                         )}
                     </tbody>
                 </table>
+
+            </div>
+            <div className="flex justify-end border-t border-slate-50">
+                <Link href="/dashboard/all-events">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-indigo-600 font-bold hover:text-indigo-700 hover:bg-indigo-50"
+                    >
+                        View All
+                    </Button>
+                </Link>
             </div>
         </Card>
     );
