@@ -20,7 +20,7 @@ export default function ReviewModal({ isOpen, onClose, eventId, existingReview, 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [mounted, setMounted] = useState(false);
 
-    // SSR এবং Hydration ঠিক রাখার জন্য মাউন্ট চেক
+
     useEffect(() => {
         setMounted(true);
         return () => setMounted(false);
@@ -44,9 +44,11 @@ export default function ReviewModal({ isOpen, onClose, eventId, existingReview, 
         setIsSubmitting(false);
     };
 
-    // মডালের মূল UI স্ট্রাকচার
+    
     const modalContent = (
+        
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <h1>hello joy</h1>
             <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl relative">
                 <h2 className="text-xl font-bold text-slate-800 mb-4">
                     {existingReview ? 'View Your Review' : 'Leave a Review'}
@@ -99,6 +101,6 @@ export default function ReviewModal({ isOpen, onClose, eventId, existingReview, 
         </div>
     );
 
-    // ডম ট্রির বাইরে document.body তে রেন্ডার করা হচ্ছে
+    
     return createPortal(modalContent, document.body);
 }

@@ -105,12 +105,33 @@ export default function MyReviewsContainer() {
     };
 
     // Text Truncation Utility
-    const truncateText = (text: string | null, maxWords: number) => {
+    const truncateText = (text: string | null, maxWords: number, maxChars: number) => {
         if (!text) return "";
+
+        // ১. শব্দের কন্ডিশন অনুযায়ী লেখা কাটলে কেমন দেখাবে তা বের করি
         const words = text.split(" ");
-        if (words.length <= maxWords) return text;
-        return words.slice(0, maxWords).join(" ") + "...";
+        let truncatedByWords = text;
+        if (words.length > maxWords) {
+            truncatedByWords = words.slice(0, maxWords).join(" ") + "...";
+        }
+
+        // ২. অক্ষরের কন্ডিশন অনুযায়ী লেখা কাটলে কেমন দেখাবে তা বের করি
+        let truncatedByChars = text;
+        if (text.length > maxChars) {
+            truncatedByChars = text.slice(0, maxChars).trim() + "...";
+        }
+
+        // ৩. আসল লেখার চেয়ে যেকোনো একটি কন্ডিশন ছোট হলেই '...' সহ ছোট লেখাটি রিটার্ন করবে
+        // এখানে আমরা চেক করছি কোন কাটাকাটি করা লেখাটি আকারে সবচেয়ে ছোট
+        if (truncatedByWords.length < text.length || truncatedByChars.length < text.length) {
+            return truncatedByWords.length < truncatedByChars.length ? truncatedByWords : truncatedByChars;
+        }
+
+        return text;
     };
+
+
+
 
     if (loading) return <div className="p-8 text-center animate-pulse">Loading your reviews...</div>;
 
@@ -126,7 +147,7 @@ export default function MyReviewsContainer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {reviews.map((review) => {
                         const wordCount = review.comment ? review.comment.split(" ").length : 0;
-                        const isLongText = wordCount > 15;
+                        const isLongText = wordCount > 15 || (review.comment?.length || 0) > 100;
 
                         return (
                             <div key={review.id} className="border border-gray-200 rounded-xl p-5 shadow-sm bg-white flex flex-col justify-between">
@@ -143,7 +164,7 @@ export default function MyReviewsContainer() {
                                     </div>
 
                                     <div className="text-sm text-gray-700 mb-4 break-words">
-                                        {truncateText(review.comment, 15)}
+                                        {truncateText(review.comment, 15, 100)}
                                         {isLongText && (
                                             <button
                                                 onClick={() => openReadMore(review)}

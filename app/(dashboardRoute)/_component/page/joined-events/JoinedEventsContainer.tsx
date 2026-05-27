@@ -67,6 +67,7 @@ export default function JoinedEventsContainer() {
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Joined Events</h1>
+                <p className="text-slate-500 mt-1">Manage your event participations, payments, and reviews.</p>
                 <p className="text-sm text-gray-500 mt-0.5">{events.length} events</p>
             </div>
 

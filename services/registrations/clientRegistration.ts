@@ -1,3 +1,4 @@
+import { SingleEvent } from "@/types/event";
 import { ParticipantType } from "@/types/registration";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_URL;
@@ -39,9 +40,14 @@ export const payPrivateEvent = async (eventId: string) => {
     }
 };
 
+interface EventParticipantsResponse {
+    event: SingleEvent
+    participants: ParticipantType[];
+}
+
 export const getEventParticipantsService = async (
     eventId: string
-): Promise<{ success: boolean; data: ParticipantType[]; message?: string }> => {
+): Promise<{ success: boolean; data: EventParticipantsResponse | null; message?: string }> => {
     try {
         const res = await fetch(`${BASE}/registrations/participants?eventId=${eventId}`, {
             method: 'GET',
@@ -49,12 +55,19 @@ export const getEventParticipantsService = async (
             credentials: 'include',
         });
         const data = await res.json();
-        if (!res.ok) return { success: false, data: [], message: data.message };
-        return { success: true, data: data.data || [] };
+        // console.log("from service file", data)
+
+        if (!res.ok) return { success: false, data: null, message: data.message };
+
+        return {
+            success: true,
+            data: data.data ? { event: data.data.event, participants: data.data.participants } : null
+        };
     } catch (error) {
-        return { success: false, data: [], message: 'Failed to fetch participants.' };
+        return { success: false, data: null, message: 'Failed to fetch participants.' };
     }
 };
+
 
 export const updateParticipantStatusService = async (
     registrationId: string,

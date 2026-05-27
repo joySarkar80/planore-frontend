@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { joinEvent } from '@/services/registrations/clientRegistration'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface ActionSidebarProps {
     event: {
@@ -25,6 +26,7 @@ interface ActionSidebarProps {
 }
 
 export function ActionSidebar({ event }: ActionSidebarProps) {
+    const router = useRouter();
     const [loading, setLoading] = React.useState(false);
     const isPaid = Number(event.registrationFee) > 0;
 
@@ -49,6 +51,7 @@ export function ActionSidebar({ event }: ActionSidebarProps) {
                 } else {
                     toast.success(response.message || 'Action completed successfully!');
                     // window.location.reload();
+                    router.push('/dashboard/joined-events'); 
                 }
             } else {
                 // alert(response.message || 'Failed to complete registration');

@@ -45,3 +45,18 @@ export interface EventDetails {
         registrations: number;
     };
 }
+
+export interface SingleEvent {
+    id: string;
+    title: string;
+    description: string;
+    startAt: string;
+    venue: string | null;
+    eventLink: string | null;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    visibility: 'PUBLIC' | 'PRIVATE';
+    registrationFee: string;
+    ownerId: string;
+    createdAt: string;
+    updatedAt: string;
+}

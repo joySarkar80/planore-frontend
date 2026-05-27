@@ -52,12 +52,12 @@ export function JoinedEventRow({
             setIsReviewModalOpen(true);
             return;
         }
-        if (!is3MinutesPassed) {
-            toast.error(
-                'Reviews cannot be submitted at this moment. You can submit a review 2 minutes after the event starts.'
-            );
-            return;
-        }
+        // if (!is3MinutesPassed) {
+        //     toast.error(
+        //         'Reviews cannot be submitted at this moment. You can submit a review 2 minutes after the event starts.'
+        //     );
+        //     return;
+        // }
         setIsReviewModalOpen(true);
     };
 
