@@ -44,6 +44,19 @@ export const getMyReviewsService = async () => {
     }
 };
 
+export const getEventReviewsService = async (eventId: string) => {
+    try {
+        const res = await fetch(`${BASE}/reviews/event/${eventId}`, {
+            method: 'GET',
+            cache: 'no-store',
+        });
+        const data = await res.json();
+        return data;
+    } catch {
+        return { success: false, message: 'Failed to fetch reviews', data: null };
+    }
+};
+
 export const updateReviewService = async (reviewId: string, payload: { rating?: number; comment?: string }) => {
     try {
         const res = await fetch(`${BASE}/reviews/${reviewId}`, {
