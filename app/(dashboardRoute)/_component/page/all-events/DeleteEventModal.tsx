@@ -24,7 +24,7 @@ export default function DeleteEventModal({
                 <p className="text-sm text-gray-600 mb-6">
                     Are you sure you want to delete{' '}
                     <span className="font-medium text-gray-900">"{title}"</span>?
-                    This action cannot be undone.
+                    
                 </p>
                 <div className="flex gap-3 justify-end">
                     <button

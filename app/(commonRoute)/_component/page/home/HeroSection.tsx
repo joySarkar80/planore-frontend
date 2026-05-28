@@ -24,6 +24,14 @@ function formatTime(dateStr: string) {
     });
 }
 
+function truncateText(text: string, maxLength: number) {
+    if (!text) return '';
+
+    if (text.length <= maxLength) return text;
+
+    return text.slice(0, maxLength) + '...';
+}
+
 export default function HeroSection({ featured }: Props) {
     if (!featured) return <HeroFallback />;
 
@@ -69,8 +77,8 @@ export default function HeroSection({ featured }: Props) {
                         </Badge>
                     </div>
 
-                    <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto">
-                        {event.description}
+                    <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto break-words whitespace-pre-line">
+                        {truncateText(event.description, 150)}
                     </p>
 
                     <div className="flex flex-col sm:flex-row justify-center gap-4">

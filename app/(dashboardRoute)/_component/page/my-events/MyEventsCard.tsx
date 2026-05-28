@@ -79,21 +79,31 @@ export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) 
 
                 {/* Meta info row */}
                 <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 mb-4">
-                    <span className="flex items-center gap-1">
-                        <Calendar className="h-3.5 w-3.5 text-indigo-400" />
-                        {fmt(event.startAt)} · {fmtTime(event.startAt)}
-                    </span>
-                    {event.venue && (
-                        <span className="flex items-center gap-1">
-                            <MapPin className="h-3.5 w-3.5 text-indigo-400" />
-                            <span className="truncate max-w-[160px]">{event.venue}</span>
-                        </span>
-                    )}
-                    <span className="flex items-center gap-1">
-                        <Users className="h-3.5 w-3.5 text-indigo-400" />
-                        {event.participantCount} participants
-                    </span>
-                </div>
+
+    <span className="flex items-center gap-1">
+        <Calendar className="h-3.5 w-3.5 text-indigo-400" />
+        Event Join: {fmt(event.startAt)} · {fmtTime(event.startAt)}
+    </span>
+
+    {event.venue && (
+        <span className="flex items-center gap-1">
+            <MapPin className="h-3.5 w-3.5 text-indigo-400" />
+            <span className="truncate max-w-[160px]">{event.venue}</span>
+        </span>
+    )}
+
+    {/* NEW: Created At */}
+    <span className="flex items-center gap-1">
+        <Calendar className="h-3.5 w-3.5 text-gray-400" />
+        Event Created: {fmt(event.createdAt)} . {fmtTime(event.createdAt)}
+    </span>
+
+    <span className="flex items-center gap-1">
+        <Users className="h-3.5 w-3.5 text-indigo-400" />
+        {event.participantCount} participants
+    </span>
+
+</div>
 
                 {/* Action buttons */}
                 <div className="flex flex-wrap gap-2">
@@ -104,7 +114,7 @@ export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) 
                         </button>
                     </Link>
 
-                    <Link href={`/dashboard/edit-event/${event.id}`}>
+                    <Link href={`/dashboard/my-events/edit/${event.id}`}>
                         <button className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
                             <Edit2 className="h-3.5 w-3.5" />
                             Edit

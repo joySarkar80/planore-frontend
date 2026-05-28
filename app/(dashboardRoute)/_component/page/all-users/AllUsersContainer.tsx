@@ -66,11 +66,34 @@ export default function AllUsersContainer() {
 
     const handleSaveStatus = async (id: string) => {
         setSavingId(id);
+
         try {
-            const res = await updateUserStatus(id, statusMap[id]);
+            const updatedStatus = statusMap[id];
+
+            const res = await updateUserStatus(id, updatedStatus);
+
             if (res.success) {
+
+                // Update only changed row locally
+                setUsers((prev) =>
+                    prev.map((user) =>
+                        user.id === id
+                            ? {
+                                ...user,
+                                status: updatedStatus,
+                            }
+                            : user
+                    )
+                );
+
+                // Remove from changed rows
+                setChangedRows((prev) => {
+                    const next = new Set(prev);
+                    next.delete(id);
+                    return next;
+                });
+
                 toast.success('Status updated');
-                await fetchUsers();
             } else {
                 toast.error(res.message || 'Failed to update status');
             }
@@ -83,17 +106,60 @@ export default function AllUsersContainer() {
 
     const handleConfirmAction = async () => {
         if (!confirmModal.userId || !confirmModal.action) return;
+
+        const userId = confirmModal.userId;
+
         setActionLoading(true);
 
         try {
-            const res = confirmModal.action === 'delete'
-                ? await deleteUser(confirmModal.userId)
-                : await updateUserStatus(confirmModal.userId, 'BANNED');
+            const res =
+                confirmModal.action === 'delete'
+                    ? await deleteUser(userId)
+                    : await updateUserStatus(userId, 'BANNED');
 
             if (res.success) {
-                toast.success(confirmModal.action === 'delete' ? 'User deleted' : 'User banned');
+
+                // Delete user locally
+                if (confirmModal.action === 'delete') {
+
+                    setUsers((prev) =>
+                        prev.filter((user) => user.id !== userId)
+                    );
+
+                    setMeta((prev) => ({
+                        ...prev,
+                        total: prev.total - 1,
+                    }));
+
+                } else {
+
+                    // Ban user locally
+                    setUsers((prev) =>
+                        prev.map((user) =>
+                            user.id === userId
+                                ? {
+                                    ...user,
+                                    status: 'BANNED',
+                                }
+                                : user
+                        )
+                    );
+
+                    // Update dropdown state
+                    setStatusMap((prev) => ({
+                        ...prev,
+                        [userId]: 'BANNED',
+                    }));
+                }
+
+                toast.success(
+                    confirmModal.action === 'delete'
+                        ? 'User deleted'
+                        : 'User banned'
+                );
+
                 closeModal();
-                await fetchUsers();
+
             } else {
                 toast.error(res.message || 'Action failed');
             }

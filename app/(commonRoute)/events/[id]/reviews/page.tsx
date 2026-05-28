@@ -1,7 +1,5 @@
-import React from 'react'
+import AllEventReviewsPage from '@/app/(commonRoute)/_component/page/review/AllEventReviewsPage'
 
-export default function page() {
-  return (
-    <div>page</div>
-  )
+export default function EventReviewsPage() {
+  return <AllEventReviewsPage />
 }

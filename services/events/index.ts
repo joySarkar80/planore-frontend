@@ -46,7 +46,7 @@ export const createEvent = async (payload: ICreateEvent) => {
 
 // for home page. this fetch use in event slider.
 export const getUpcomingEvents = async (): Promise<PublicEvent[]> => {
-    console.log("clicked")
+    // console.log("clicked")
     try {
         const res = await fetch(
             `${BASE}/events?limit=9&upcoming=true&visibility=PUBLIC`,

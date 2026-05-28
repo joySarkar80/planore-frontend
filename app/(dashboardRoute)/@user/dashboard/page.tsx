@@ -16,7 +16,6 @@ export default function DashboardPage() {
   const [upcomingApprovedCount, setUpcomingApprovedCount] = React.useState<number | null>(null);
   const [upcomingRegistrationsCount, setUpcomingRegistrationsCount] = React.useState<number | null>(null);
   const [loading, setLoading] = React.useState(true);
-
   React.useEffect(() => {
     const fetchAll = async () => {
       const [eventsRes, invitationsRes, statsRes] = await Promise.all([
@@ -24,15 +23,16 @@ export default function DashboardPage() {
         getMyInvitationsService(),
         getDashboardStats(),
       ]);
+      // console.log(eventsRes)
 
       if (eventsRes.success) {
-        setRecentEvents(filterRecentEvents(eventsRes.data));
+        setRecentEvents(eventsRes.data);
       }
 
       if (invitationsRes.success) {
         setInvitations(invitationsRes.data);
       }
-      console.log('StatsRes:', statsRes.data);
+      // console.log('StatsRes:', statsRes.data);
 
       if (statsRes.success && statsRes.data) {
         setUpcomingApprovedCount(statsRes.data.upcomingApprovedEventsCount);

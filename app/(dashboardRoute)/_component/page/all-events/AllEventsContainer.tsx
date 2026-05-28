@@ -84,46 +84,112 @@ export default function AllEventsContainer() {
 
     const handleSave = async (id: string) => {
         setSavingId(id);
+
         try {
-            const res = await UpdateEventStatus(id, statusMap[id]);
+            const updatedStatus = statusMap[id];
+
+            const res = await UpdateEventStatus(id, updatedStatus);
+
             if (res.success) {
+
+                // Update only changed row locally
+                setEvents((prev) =>
+                    prev.map((event) =>
+                        event.id === id
+                            ? {
+                                ...event,
+                                status: updatedStatus,
+                            }
+                            : event
+                    )
+                );
+
+                // Remove row from changedRows
+                setChangedRows((prev) => {
+                    const next = new Set(prev);
+                    next.delete(id);
+                    return next;
+                });
+
                 toast.success('Status updated');
-                await fetchEvents();
             } else {
                 toast.error(res.message || 'Failed to update');
             }
-        } catch { toast.error('Something went wrong'); }
-        finally { setSavingId(null); }
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setSavingId(null);
+        }
     };
 
     const handleDelete = async () => {
         if (!deleteModal.eventId) return;
-        setDeletingId(deleteModal.eventId);
+
+        const eventId = deleteModal.eventId;
+
+        setDeletingId(eventId);
+
         try {
-            const res = await adminDeleteEvent(deleteModal.eventId);
+            const res = await adminDeleteEvent(eventId);
+
             if (res.success) {
+
+                // Remove deleted row locally
+                setEvents((prev) =>
+                    prev.filter((event) => event.id !== eventId)
+                );
+
+                // Update total count
+                setMeta((prev) => ({
+                    ...prev,
+                    total: prev.total - 1,
+                }));
+
                 toast.success('Event deleted');
-                setDeleteModal({ open: false, eventId: null, title: '' });
-                await fetchEvents();
+
+                setDeleteModal({
+                    open: false,
+                    eventId: null,
+                    title: '',
+                });
             } else {
                 toast.error(res.message || 'Failed to delete');
             }
-        } catch { toast.error('Something went wrong'); }
-        finally { setDeletingId(null); }
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setDeletingId(null);
+        }
     };
 
     const handleSetFeatured = async (id: string) => {
         setFeaturingId(id);
+
         try {
             const res = await setFeaturedEvent(id);
+
             if (res.success) {
+
+                // Update only local state
+                setEvents((prev) =>
+                    prev.map((event) => ({
+                        ...event,
+                        featuredEvent:
+                            event.id === id
+                                ? { id: 'featured' }
+                                : null,
+                    }))
+                );
+
                 try {
-                    await fetch('/api/revalidate', { method: 'POST' });
+                    await fetch('/api/revalidate', {
+                        method: 'POST',
+                    });
                 } catch (err) {
-                    console.error("Revalidation failed:", err);
+                    console.error('Revalidation failed:', err);
                 }
+
                 toast.success('Event set as featured');
-                await fetchEvents();
             } else {
                 toast.error(res.message || 'Failed');
             }

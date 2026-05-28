@@ -74,12 +74,12 @@ export function JoinedEventRow({
 
             {/* Join Date */}
             <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                {fmtDate(createdAt)}
+                {fmtDate(event.startAt)}
             </td>
 
             {/* Join Time */}
             <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                {fmtTime(createdAt)}
+                {fmtTime(event.startAt)}
             </td>
 
             {/* Join Status */}

@@ -57,7 +57,7 @@ export default function NewEventsTable({ events, loading }: NewEventsTableProps)
         <Card className="lg:col-span-2 border-slate-200/60 bg-white overflow-hidden rounded-2xl shadow-sm">
             <CardHeader className="border-b border-slate-50 p-6 flex flex-row items-center justify-between">
                 <CardTitle className="text-xl font-extrabold text-slate-900">
-                    New Events Waiting For Admin Approval
+                    New Upcoming Events Waiting For Approval
                 </CardTitle>
             </CardHeader>
             <div className="overflow-x-auto">

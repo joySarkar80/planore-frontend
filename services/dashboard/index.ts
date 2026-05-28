@@ -63,13 +63,14 @@ export const getRecentEventsService = async (): Promise<{
     message?: string;
 }> => {
     try {
-        const res = await fetch(`${BASE}/events/my-events?limit=10`, {
+        const res = await fetch(`${BASE}/events/recent-events`, {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store',
         });
 
         const data = await res.json();
+        console.log(data)
 
         if (!res.ok) {
             return { success: false, data: [], message: data.message || 'Failed to load events.' };

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { getRecentEventsService, getMyInvitationsService, getDashboardStats, RecentEventType, InvitationType } from '@/services/dashboard';
+import { getMyInvitationsService, getDashboardStats, RecentEventType, InvitationType } from '@/services/dashboard';
 import { countUpcomingApproved, filterRecentEvents } from '../../_component/dashboard/helpers';
 import DashboardHeader from '../../_component/dashboard/DashboardHeader';
 import StatCards from '../../_component/dashboard/StatCards';
@@ -22,7 +22,6 @@ export default function DashboardPage() {
     React.useEffect(() => {
         const fetchAll = async () => {
             const [eventsRes, invitationsRes, statsRes] = await Promise.all([
-                // getRecentEventsService(),
                 getAllEventsForAdmin({
                     status: 'PENDING',
                     limit: 5,

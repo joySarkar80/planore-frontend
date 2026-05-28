@@ -128,7 +128,7 @@ export default function UsersTable({
                                         </button>
                                         <button
                                             onClick={() => onOpenModal(user.id, user.name, 'ban')}
-                                            disabled={user.status === 'BANNED'}
+                                            disabled={currentStatus === 'BANNED'}
                                             className="text-xs px-3 py-1 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                                         >
                                             Ban

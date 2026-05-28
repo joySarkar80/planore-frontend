@@ -111,7 +111,7 @@ export default function ManageParticipantsContainer({ eventId }: ManageParticipa
 
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <span className="text-xs font-semibold text-indigo-600 tracking-wider uppercase">Selected Event</span>
+                    {/* <span className="text-xs font-semibold text-indigo-600 tracking-wider uppercase">Selected Event</span> */}
                     <h2 className="text-xl font-bold text-slate-800 tracking-tight">
                         {event?.title}
                     </h2>

@@ -38,12 +38,12 @@ export default function MyEventsContainer() {
 
     const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
-    // 🔥 debounce input state (ONLY for typing)
+    // debounce input state (ONLY for typing)
     const [debouncedSearch, setDebouncedSearch] = React.useState('')
 
     const requestId = React.useRef(0)
 
-    // ✅ debounce search ONLY
+    // debounce search ONLY
     React.useEffect(() => {
         const timer = setTimeout(() => {
             setPage(1)
@@ -53,7 +53,7 @@ export default function MyEventsContainer() {
         return () => clearTimeout(timer)
     }, [search])
 
-    // ✅ SINGLE FETCH SYSTEM (NO DUPLICATION)
+    // SINGLE FETCH SYSTEM (NO DUPLICATION)
     const fetchEvents = React.useCallback(async () => {
         const id = ++requestId.current
 
@@ -94,32 +94,51 @@ export default function MyEventsContainer() {
         }
     }, [debouncedSearch, statusFilter, page])
 
-    // ✅ ONLY ONE FETCH TRIGGER
+    // ONLY ONE FETCH TRIGGER
     React.useEffect(() => {
         fetchEvents()
     }, [fetchEvents])
 
     const handleDelete = async () => {
-        if (!deleteModal.eventId) return
+        if (!deleteModal.eventId) return;
 
-        setDeletingId(deleteModal.eventId)
+        const eventId = deleteModal.eventId;
+
+        setDeletingId(eventId);
 
         try {
-            const res = await deleteEvent(deleteModal.eventId)
+            const res = await deleteEvent(eventId);
 
             if (res.success) {
-                toast.success('Event deleted')
-                setDeleteModal({ open: false, eventId: null, title: '' })
-                fetchEvents()
+
+                // Remove deleted event locally
+                setEvents((prev) =>
+                    prev.filter((event) => event.id !== eventId)
+                );
+
+                // Update total count
+                setMeta((prev) => ({
+                    ...prev,
+                    total: prev.total - 1,
+                }));
+
+                toast.success('Event deleted');
+
+                setDeleteModal({
+                    open: false,
+                    eventId: null,
+                    title: '',
+                });
+
             } else {
-                toast.error(res.message || 'Failed to delete')
+                toast.error(res.message || 'Failed to delete');
             }
         } catch {
-            toast.error('Something went wrong')
+            toast.error('Something went wrong');
         } finally {
-            setDeletingId(null)
+            setDeletingId(null);
         }
-    }
+    };
 
     return (
         <div className="p-6 max-w-full">

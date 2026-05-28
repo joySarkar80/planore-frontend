@@ -60,7 +60,7 @@ export default function InvitedUsersContainer({ eventId }: InvitedUsersContainer
                     <Link href="/dashboard/my-events" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700 mb-2">
                         <ArrowLeft className="h-4 w-4" /> Back to Events
                     </Link>
-                    <h1 className="text-3xl font-black text-slate-900 tracking-tight">Invited Guest List</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Invited Guest List</h1>
                     <p className="text-slate-500 mt-1">Monitor realtime outbound invitations and acceptance states.</p>
                 </div>
             </div>

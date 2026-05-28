@@ -80,7 +80,7 @@ export function EventInfo({ event }: EventInfoProps) {
                 {/* Description (Null-safe) */}
                 <div className="prose prose-slate max-w-none">
                     <h3 className="text-2xl font-bold text-slate-900 mb-4">About this event</h3>
-                    <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-wrap">
+                    <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-wrap break-words">
                         {event.description ? event.description.trim() : "No description provided for this event."}
                     </p>
                 </div>
