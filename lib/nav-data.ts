@@ -49,6 +49,11 @@ export const NAV_DATA = {
                     icon: Calendar,
                 },
                 {
+                    title: "Blocked Users",
+                    url: "/dashboard/blocked-users",
+                    icon: Users,
+                },
+                {
                     title: "My Reviews",
                     url: "/dashboard/reviews",
                     icon: MessageSquare,
@@ -86,6 +91,11 @@ export const NAV_DATA = {
                     title: "Joined Events",
                     url: "/dashboard/joined-events",
                     icon: Calendar,
+                },
+                {
+                    title: "Blocked Users",
+                    url: "/dashboard/blocked-users",
+                    icon: Users,
                 },
                 {
                     title: "My Reviews",

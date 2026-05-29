@@ -1,4 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
+import { fmt } from '@/lib/utils';
 import { Calendar, MapPin, Clock, ShieldCheck, Video } from 'lucide-react'
 
 interface EventInfoProps {
@@ -12,9 +13,7 @@ interface EventInfoProps {
 }
 
 export function EventInfo({ event }: EventInfoProps) {
-    const startDate = new Date(event.startAt);
-    const formattedDate = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(startDate);
-    const formattedTime = new Intl.DateTimeFormat('en-US', { timeStyle: 'short' }).format(startDate);
+    const startDate = event.startAt;
     const fee = Number(event.registrationFee);
 
     return (
@@ -27,7 +26,7 @@ export function EventInfo({ event }: EventInfoProps) {
                         </div>
                         <div>
                             <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Date</div>
-                            <div className="text-lg font-bold text-slate-900">{formattedDate}</div>
+                            <div className="text-lg font-bold text-slate-900">{fmt(startDate, 'date')}</div>
                         </div>
                     </div>
 
@@ -37,7 +36,7 @@ export function EventInfo({ event }: EventInfoProps) {
                         </div>
                         <div>
                             <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Time</div>
-                            <div className="text-lg font-bold text-slate-900">{formattedTime}</div>
+                            <div className="text-lg font-bold text-slate-900">{fmt(startDate, 'time')}</div>
                         </div>
                     </div>
 

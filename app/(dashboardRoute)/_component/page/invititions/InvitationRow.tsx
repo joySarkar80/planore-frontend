@@ -14,10 +14,8 @@ export default function InvitationRow({ invitation }: { invitation: any }) {
     const event = invitation.event;
     const isFree = Number(event.registrationFee) === 0;
 
-    // ইভেন্টের ধরন চেক করা হচ্ছে
     const isPublicPaid = event.visibility === 'PUBLIC' && !isFree;
 
-    // বাটন টেক্সট লজিক: ফ্রি হলে Accept, পেইড (পাবলিক/প্রাইভেট) হলে Accept and Pay
     const acceptButtonText = isFree ? 'Accept' : 'Accept and Pay';
 
     // const handleResponse = async (action: 'ACCEPT' | 'REJECT') => {

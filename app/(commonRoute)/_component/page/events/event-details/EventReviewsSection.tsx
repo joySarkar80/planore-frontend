@@ -24,7 +24,7 @@ export default function EventReviewsSection({ eventId }: EventReviewsSectionProp
             try {
                 const res = await getEventReviewsService(eventId)
                 if (res.success) setReviews(res.data || [])
-                    console.log("from review section",  res.data)
+                    // console.log("from review section",  res.data)
             } finally {
                 setLoading(false)
             }

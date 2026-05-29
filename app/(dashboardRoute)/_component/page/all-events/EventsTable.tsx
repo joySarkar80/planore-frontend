@@ -1,5 +1,6 @@
 'use client';
 
+import { fmt } from '@/lib/utils';
 import Link from 'next/link';
 
 export type EventStatus = 'APPROVED' | 'REJECTED' | 'PENDING';
@@ -48,13 +49,6 @@ export default function EventsTable({
     onDeleteClick,
     onFeatureClick,
 }: EventsTableProps) {
-    const fmt = (d: string, type: 'date' | 'time') => {
-        const dt = new Date(d);
-        return type === 'date'
-            ? dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-            : dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    };
-
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { ArrowLeft, Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 
@@ -10,6 +10,7 @@ import { getMyEvents, deleteEvent } from '@/services/events'
 import DeleteConfirmModal from '../../../_component/page/my-events/DeleteConfirmModal'
 import MyEventsFilters from './MyEventsFilters'
 import MyEventCard, { MyEvent } from './MyEventsCard'
+import { useRouter } from 'next/navigation'
 
 type DeleteModalState = {
     open: boolean
@@ -20,6 +21,7 @@ type DeleteModalState = {
 export default function MyEventsContainer() {
     const [events, setEvents] = React.useState<MyEvent[]>([])
     const [loading, setLoading] = React.useState(true)
+    const router = useRouter();
 
     const [search, setSearch] = React.useState('')
     const [statusFilter, setStatusFilter] = React.useState('')
@@ -142,6 +144,14 @@ export default function MyEventsContainer() {
 
     return (
         <div className="p-6 max-w-full">
+            <button
+                type="button"
+                onClick={() => router.back()}
+                className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700 cursor-pointer"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
             {/* Header */}
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>

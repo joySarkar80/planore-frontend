@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { getMyJoinedEventsService } from '@/services/registrations/clientRegistration';
 import { JoinedEventRow } from './JoinedEventRow';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 type Filter = 'ALL EVENTS' | 'UPCOMING' | 'PAST';
 
@@ -64,6 +65,16 @@ export default function JoinedEventsContainer() {
 
     return (
         <div className="p-6 max-w-full">
+            {/* Router.back() bebohar kore dynamic back button banano holo */}
+            <button
+                type="button"
+                onClick={() => router.back()}
+                className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700 cursor-pointer"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
+
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Joined Events</h1>
@@ -128,5 +139,5 @@ export default function JoinedEventsContainer() {
                 </div>
             </div>
         </div>
-    );
+    )
 }

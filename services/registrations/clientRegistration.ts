@@ -124,3 +124,14 @@ export const getMyJoinedEventsService = async (
         };
     }
 };
+
+export const deleteRegistrationService = async (registrationId: string) => {
+    const res = await fetch(
+        `${BASE}/registrations/${registrationId}`,
+        {
+            method: 'DELETE',
+            credentials: 'include',
+        }
+    );
+    return res.json();
+};

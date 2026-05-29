@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Calendar, Users, Edit2, Trash2, ExternalLink, UserPlus, MailCheck, MapPin, DollarSign } from 'lucide-react'
+import { fmt } from '@/lib/utils'
 
 export type EventStatus = 'APPROVED' | 'REJECTED' | 'PENDING'
 export type EventVisibility = 'PUBLIC' | 'PRIVATE'
@@ -39,20 +40,6 @@ type MyEventCardProps = {
 export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) {
     const isFree = Number(event.registrationFee) === 0
 
-    const fmt = (d: string) =>
-        new Date(d).toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-        })
-
-    const fmtTime = (d: string) =>
-        new Date(d).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true,
-        })
-
     return (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
             <div className="p-5">
@@ -72,7 +59,7 @@ export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) 
                             {event.visibility}
                         </span>
                         <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${isFree ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                            {isFree ? 'Free' : `৳${Number(event.registrationFee).toLocaleString()}`}
+                            {isFree ? 'Free' : `$${Number(event.registrationFee).toLocaleString()}`}
                         </span>
                     </div>
                 </div>
@@ -82,7 +69,7 @@ export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) 
 
     <span className="flex items-center gap-1">
         <Calendar className="h-3.5 w-3.5 text-indigo-400" />
-        Event Join: {fmt(event.startAt)} · {fmtTime(event.startAt)}
+        Event Join: {fmt(event.startAt, "date")} · {fmt(event.startAt, "time")}
     </span>
 
     {event.venue && (
@@ -95,7 +82,7 @@ export default function MyEventCard({ event, onDeleteClick }: MyEventCardProps) 
     {/* NEW: Created At */}
     <span className="flex items-center gap-1">
         <Calendar className="h-3.5 w-3.5 text-gray-400" />
-        Event Created: {fmt(event.createdAt)} . {fmtTime(event.createdAt)}
+        Event Created: {fmt(event.createdAt, "date")} . {fmt(event.createdAt, "time")}
     </span>
 
     <span className="flex items-center gap-1">

@@ -1,12 +1,12 @@
 import { Star, Edit, Trash2, UserCircle } from "lucide-react";
 import { ReviewCardReview } from "./type";
+import { fmt } from "@/lib/utils";
 
 
 
 interface ReviewCardProps {
     review: ReviewCardReview;
     onReadMore: (review: ReviewCardReview) => void;
-    // ये দুটো না দিলে edit/delete button দেখাবে না
     onEdit?: (review: ReviewCardReview) => void;
     onDelete?: (review: ReviewCardReview) => void;
 }
@@ -21,12 +21,6 @@ const truncateText = (text: string | null | undefined, maxWords: number, maxChar
     }
     return text;
 };
-
-const fmtDate = (d: string) =>
-    new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
-const fmtTime = (d: string) =>
-    new Date(d).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
 export default function ReviewCard({ review, onReadMore, onEdit, onDelete }: ReviewCardProps) {
     // console.log("from",review)
@@ -58,7 +52,7 @@ export default function ReviewCard({ review, onReadMore, onEdit, onDelete }: Rev
 
                 {/* Review date & time */}
                 <span className="text-xs text-gray-400 whitespace-nowrap ml-auto">
-                    {fmtDate(review.createdAt)} · {fmtTime(review.createdAt)}
+                    {fmt(review.createdAt, "date")} · {fmt(review.createdAt, "time")}
                 </span>
             </div>
 

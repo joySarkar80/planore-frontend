@@ -192,19 +192,19 @@ export default function EditEventContainer({
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-4">
 
+            <button
+                type="button"
+                onClick={() => router.back()}
+                className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700 cursor-pointer"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
             {/* Header */}
             <div className="flex items-center gap-4">
 
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => router.back()}
-                    className="rounded-xl"
-                >
-                    <ArrowLeft className="h-5 w-5" />
-                </Button>
 
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">

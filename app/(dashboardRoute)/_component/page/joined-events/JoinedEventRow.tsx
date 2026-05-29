@@ -7,6 +7,7 @@ import { Loader2 } from 'lucide-react';
 import CreateReviewModal from './CreateReviewModal';
 import ViewReviewModal from './ViewReviewModal';
 import { payPrivateEvent } from '@/services/registrations/clientRegistration';
+import { fmt } from '@/lib/utils';
 
 export function JoinedEventRow({
     registration,
@@ -28,16 +29,6 @@ export function JoinedEventRow({
 
     const existingReview = event.reviews?.length > 0 ? event.reviews[0] : null;
     const hasReviewed = !!existingReview;
-
-    const fmtDate = (d: string) =>
-        new Date(d).toLocaleDateString('en-GB', {
-            day: '2-digit', month: 'short', year: 'numeric',
-        });
-
-    const fmtTime = (d: string) =>
-        new Date(d).toLocaleTimeString('en-US', {
-            hour: '2-digit', minute: '2-digit', hour12: true,
-        });
 
     const handlePrivatePayment = async (eventId: string) => {
         try {
@@ -74,12 +65,12 @@ export function JoinedEventRow({
 
             {/* Join Date */}
             <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                {fmtDate(event.startAt)}
+                {fmt(event.startAt, "date")}
             </td>
 
             {/* Join Time */}
             <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                {fmtTime(event.startAt)}
+                {fmt(event.startAt, "time")}
             </td>
 
             {/* Join Status */}
@@ -145,7 +136,6 @@ export function JoinedEventRow({
                 </div>
             </td>
 
-            {/* 🚀 মোডালগুলোকে এই ফ্লেক্সিবল ও হিডেন <td> এর ভেতর ঢুকিয়ে দেওয়া হলো */}
             <td className="p-0 w-0 h-0 border-none relative" aria-hidden="true">
                 {createModalOpen && (
                     <CreateReviewModal
@@ -173,7 +163,7 @@ export function JoinedEventRow({
                     />
                 )}
             </td>
-        </tr> // 👈 <tr> একদম শেষে বন্ধ হয়েছে
+        </tr> 
     );
 
 }

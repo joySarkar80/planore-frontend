@@ -13,6 +13,7 @@ import EditReviewModal from "../shared/EditReviewModal";
 import DeleteConfirmModal from "../shared/DeleteConfirmModal";
 import { ReviewCardReview } from "@/app/_component/review/type";
 import ReviewCard from "@/app/_component/review/ReviewCard";
+import { ArrowLeft } from "lucide-react";
 
 
 export default function MyReviewsContainer() {
@@ -96,6 +97,14 @@ export default function MyReviewsContainer() {
 
     return (
         <div className="space-y-6">
+            <button
+                type="button"
+                onClick={() => router.back()}
+                className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700 cursor-pointer"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
             <h2 className="text-2xl font-bold tracking-tight">My Reviews</h2>
 
             {reviews.length === 0 ? (

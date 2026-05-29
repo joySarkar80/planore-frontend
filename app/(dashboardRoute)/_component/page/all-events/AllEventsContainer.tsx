@@ -10,6 +10,7 @@ import EventFilters from './EventFilters';
 import EventsTable, { AdminEvent, EventStatus } from './EventsTable';
 import DeleteEventModal from './DeleteEventModal';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 type DeleteModalState = { open: boolean; eventId: string | null; title: string };
 
@@ -203,6 +204,14 @@ export default function AllEventsContainer() {
 
     return (
         <div className="p-6 max-w-full">
+            <button
+                type="button"
+                onClick={() => router.back()}
+                className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700 cursor-pointer"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">All Events</h1>

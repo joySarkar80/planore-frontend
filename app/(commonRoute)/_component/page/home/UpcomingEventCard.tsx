@@ -30,7 +30,7 @@ export default function UpcomingEventCard({ event }: Props) {
                             : 'bg-amber-500/15 text-amber-600 border border-amber-500/30'
                             }`}
                     >
-                        {isFree ? 'FREE' : `৳${event.registrationFee}`}
+                        {isFree ? 'FREE' : `$${event.registrationFee}`}
                     </span>
                 </div>
 

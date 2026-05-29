@@ -4,8 +4,12 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar, Users, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { fmt } from '@/lib/utils'
+
+
 
 export const EventCard = ({ event }: { event: any }) => {
+    const startDate = event.startAt;
     return (
         <Card className="group hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white rounded-2xl">
             <div className="relative overflow-hidden">
@@ -28,7 +32,7 @@ export const EventCard = ({ event }: { event: any }) => {
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center text-xs font-bold text-indigo-600 uppercase">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {new Date(event.startAt).toLocaleDateString()}
+                        {fmt(startDate, 'date')}
                     </div>
                     <div>
                         <Badge variant="secondary" className="bg-indigo-50 text-indigo-600">

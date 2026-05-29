@@ -77,7 +77,7 @@ export default function NewEventsTable({ events, loading }: NewEventsTableProps)
                         ) : events.length === 0 ? (
                             <tr>
                                 <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400 font-medium">
-                                    No events created in the last 7 days.
+                                    No events pending.
                                 </td>
                             </tr>
                         ) : (

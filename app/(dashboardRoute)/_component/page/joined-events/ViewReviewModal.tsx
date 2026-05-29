@@ -1,5 +1,6 @@
 'use client'
 
+import { fmt } from '@/lib/utils';
 import { X, Star, UserCircle } from 'lucide-react';
 
 type ViewReviewModalProps = {
@@ -21,12 +22,6 @@ export default function ViewReviewModal({
     eventTitle,
 }: ViewReviewModalProps) {
     if (!isOpen || !review) return null;
-
-    const fmtDate = (d: string) =>
-        new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
-    const fmtTime = (d: string) =>
-        new Date(d).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -52,8 +47,8 @@ export default function ViewReviewModal({
                             <Star
                                 key={star}
                                 className={`h-6 w-6 ${star <= review.rating
-                                        ? 'fill-yellow-400 text-yellow-400'
-                                        : 'text-gray-200'
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-gray-200'
                                     }`}
                             />
                         ))}
@@ -61,13 +56,17 @@ export default function ViewReviewModal({
                     </div>
 
                     {/* Comment */}
-                    {review.comment ? (
-                        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                            {review.comment}
-                        </p>
-                    ) : (
-                        <p className="text-sm text-gray-400 italic">No comment provided.</p>
-                    )}
+                    <div className="max-h-52 overflow-y-auto pr-1">
+                        {review.comment ? (
+                            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap break-words">
+                                {review.comment}
+                            </p>
+                        ) : (
+                            <p className="text-sm text-gray-400 italic">
+                                No comment provided.
+                            </p>
+                        )}
+                    </div>
 
                     {/* Footer */}
                     <div className="pt-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-2">
@@ -88,7 +87,7 @@ export default function ViewReviewModal({
                             </div>
                         )}
                         <span className="text-xs text-gray-400 ml-auto">
-                            {fmtDate(review.createdAt)} · {fmtTime(review.createdAt)}
+                            {fmt(review.createdAt, "date")} · {fmt(review.createdAt, "time")}
                         </span>
                     </div>
                 </div>

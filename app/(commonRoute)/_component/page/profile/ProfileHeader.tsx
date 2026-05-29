@@ -1,5 +1,6 @@
-import { User, Mail, Shield, CalendarDays } from 'lucide-react';
+import { User, Mail, Shield, CalendarDays, Activity } from 'lucide-react';
 import type { MyProfile } from '@/services/users';
+import { fmt } from '@/lib/utils';
 
 type Props = {
     profile: MyProfile;
@@ -72,7 +73,11 @@ export default function ProfileHeader({ profile, onEditClick }: Props) {
                     </div>
                     <div className="flex items-center gap-1.5">
                         <CalendarDays className="w-4 h-4 text-indigo-400" />
-                        <span>Joined {formatDate(profile.createdAt)}</span>
+                        <span>Registerd {fmt(profile.createdAt, "date")}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <Activity className="w-4 h-4 text-indigo-400" />
+                        <span>{profile.status}</span>
                     </div>
                 </div>
             </div>

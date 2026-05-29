@@ -91,11 +91,18 @@ export function Navbar() {
               >
                 Dashboard
               </Link>
-              <Link href="/profile">
-                <Button variant="ghost" className="text-sm font-medium transition-colors">
-                  Profile
-                </Button>
+
+              {/* প্রোফাইল লিংকে কালার কন্ডিশন যোগ করা হয়েছে */}
+              <Link
+                href="/profile"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname.startsWith('/profile') ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                Profile
               </Link>
+
               <button
                 onClick={handleLogOut}
                 className="flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors"
@@ -104,27 +111,28 @@ export function Navbar() {
                 <span>Logout</span>
               </button>
             </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              <Link href="/login">
-                <Button variant="ghost" size="sm">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700">Register</Button>
-              </Link>
-            </div>
-          )}
+          )
+            : (
+              <div className="flex items-center gap-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">Login</Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700">Register</Button>
+                </Link>
+              </div>
+            )}
         </div>
 
         {/* Mobile Nav */}
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            
+
             <SheetTrigger className="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
               <Menu className="h-6 w-6" />
             </SheetTrigger>
 
-            
+
             <SheetContent side="right" className="flex flex-col gap-6 pt-16 w-full max-w-xs bg-white">
               <div className="flex-1 overflow-y-auto flex flex-col gap-4">
                 {navLinks.map((link) => (
@@ -168,7 +176,7 @@ export function Navbar() {
                 )}
               </div>
 
-              
+
               <div className="border-t border-slate-100 pt-4">
                 {isLoggedIn ? (
                   <button

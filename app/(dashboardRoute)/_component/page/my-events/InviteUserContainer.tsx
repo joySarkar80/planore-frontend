@@ -1,10 +1,22 @@
 'use client'
 
 import * as React from 'react'
-import { Search, Loader2, CheckCircle, UserPlus, ArrowLeft } from 'lucide-react'
-import { toast } from 'sonner'
-import { inviteUserService, searchUsersService } from '@/services/invite'
 import Link from 'next/link'
+import {
+    ArrowLeft,
+    CheckCircle,
+    Loader2,
+    Search,
+    UserPlus,
+} from 'lucide-react'
+import { toast } from 'sonner'
+
+import { fmt } from '@/lib/utils'
+import { getEventById } from '@/services/events'
+import {
+    inviteUserService,
+    searchUsersService,
+} from '@/services/invite'
 import { SearchUserType } from '@/types/invite'
 
 type InviteUserContainerProps = {
@@ -12,172 +24,330 @@ type InviteUserContainerProps = {
     currentUserEmail: string
 }
 
-export default function InviteUserContainer({ eventId, currentUserEmail }: InviteUserContainerProps) {
+export default function InviteUserContainer({
+    eventId,
+    currentUserEmail,
+}: InviteUserContainerProps) {
     const [searchTerm, setSearchTerm] = React.useState('')
     const [users, setUsers] = React.useState<SearchUserType[]>([])
+
+    const [event, setEvent] = React.useState<any>(null)
+
+    const [loading, setLoading] = React.useState(true)
     const [isSearching, setIsSearching] = React.useState(false)
     const [invitingId, setInvitingId] = React.useState<string | null>(null)
 
-    const handleSearch = async (e: React.FormEvent) => {
+    // =========================
+    // Fetch Event
+    // =========================
+    React.useEffect(() => {
+        const fetchEvent = async () => {
+            try {
+                setLoading(true)
+
+                const response = await getEventById(eventId)
+
+                if (response?.success) {
+                    setEvent(response.data)
+                }
+            } catch (error) {
+                console.error(error)
+                toast.error('Failed to load event')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        if (eventId) {
+            fetchEvent()
+        }
+
+        window.scrollTo(0, 0)
+    }, [eventId])
+
+    // =========================
+    // Search Users
+    // =========================
+    const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
         if (!searchTerm.trim()) {
-            toast.error('Please type a name or email')
+            toast.error('Please enter name or email')
             return
         }
 
-        setIsSearching(true)
-        const response = await searchUsersService(searchTerm, eventId)
+        try {
+            setIsSearching(true)
 
-        if (response.success) {
-            setUsers(response.data)
-        } else {
-            toast.error(response.message || 'User not found')
+            const response = await searchUsersService(
+                searchTerm,
+                eventId
+            )
+
+            if (!response.success) {
+                toast.error(response.message || 'User not found')
+                setUsers([])
+                return
+            }
+
+            setUsers(response.data || [])
+        } catch (error) {
+            console.error(error)
+            toast.error('Something went wrong')
+        } finally {
+            setIsSearching(false)
         }
-        setIsSearching(false)
     }
 
-    const handleInvite = async (userEmail: string, userId: string) => {
+    // =========================
+    // Invite User
+    // =========================
+    const handleInvite = async (
+        userEmail: string,
+        userId: string
+    ) => {
         if (userEmail === currentUserEmail) {
-            toast.error('You cannot invite yourself!')
+            toast.error('You cannot invite yourself')
             return
         }
 
-        setInvitingId(userId)
+        try {
+            setInvitingId(userId)
 
-        const response = await inviteUserService(eventId, userEmail)
+            const response = await inviteUserService(
+                eventId,
+                userEmail
+            )
 
-        if (response.success) {
-            toast.success('User invited successfully!')
-            setUsers(prevUsers =>
-                prevUsers.map(u =>
-                    u.id === userId
-                        ? { ...u, registrationStatus: 'INVITED' }
-                        : u
+            if (!response.success) {
+                toast.error(response.message)
+                return
+            }
+
+            toast.success('Invitation sent successfully')
+
+            setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user.id === userId
+                        ? {
+                            ...user,
+                            registrationStatus: 'INVITED',
+                        }
+                        : user
                 )
             )
-        } else {
-            toast.error(response.message)
+        } catch (error) {
+            console.error(error)
+            toast.error('Failed to invite user')
+        } finally {
+            setInvitingId(null)
         }
-        setInvitingId(null)
     }
 
+    // =========================
+    // Loading State
+    // =========================
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-50">
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent" />
+            </div>
+        )
+    }
+
+    // =========================
+    // UI
+    // =========================
     return (
-        <div className="space-y-6 max-w-5xl mx-auto p-4">
+        <div className="mx-auto max-w-5xl space-y-6 p-4">
+            {/* Header */}
             <div>
-                <Link href="/dashboard/my-events" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700 mb-2">
-                    <ArrowLeft className="h-4 w-4" /> Back to Events
+                <Link
+                    href="/dashboard/my-events"
+                    className="mb-2 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 transition hover:text-indigo-700"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
                 </Link>
-                <h1 className="text-2xl font-bold text-gray-900">Invite Users</h1>
-                <p className="text-slate-500 mt-1">Search for users by name or email to invite them to the event.</p>
+
+                <h1 className="text-2xl font-bold text-slate-900">
+                    Invite Users
+                </h1>
+
+                <p className="mt-1 text-sm text-slate-500">
+                    Search users by name or email and invite them to
+                    your event.
+                </p>
             </div>
 
-            <form onSubmit={handleSearch} className="flex gap-3">
+            {/* Event Info */}
+            <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:flex-row md:items-center">
+                <div>
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800">
+                        {event?.title}
+                    </h2>
+                </div>
+
+                <div className="w-fit rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+                    <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                        Event Date & Time
+                    </span>
+
+                    <span className="text-sm font-bold text-slate-700">
+                        {fmt(event?.startAt, 'date')} ·{' '}
+                        {fmt(event?.startAt, 'time')}
+                    </span>
+                </div>
+            </div>
+
+            {/* Search Form */}
+            <form
+                onSubmit={handleSearch}
+                className="flex flex-col gap-3 sm:flex-row"
+            >
                 <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
+                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+
                     <input
                         type="text"
                         placeholder="Search users by name or email..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-11 pr-4 rounded-xl h-12 border border-slate-200 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 transition-all"
+                        onChange={(e) =>
+                            setSearchTerm(e.target.value)
+                        }
+                        className="h-12 w-full rounded-xl border border-slate-200 pl-11 pr-4 text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                     />
                 </div>
+
                 <button
                     type="submit"
                     disabled={isSearching}
-                    className="h-12 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold flex items-center justify-center min-w-[100px] disabled:opacity-70 transition-colors"
+                    className="flex h-12 min-w-[120px] items-center justify-center rounded-xl bg-indigo-600 px-6 font-bold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                    {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Search'}
+                    {isSearching ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                        'Search'
+                    )}
                 </button>
             </form>
 
-            <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
-                <div className="w-full overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
+            {/* Table */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-left">
                         <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200">
-                                <th className="p-4 font-bold text-slate-700 text-sm">User Profile</th>
-                                <th className="p-4 font-bold text-slate-700 text-sm">Email Address</th>
-                                <th className="p-4 font-bold text-slate-700 text-sm text-right">Action</th>
+                            <tr className="border-b border-slate-200 bg-slate-50">
+                                <th className="p-4 text-sm font-bold text-slate-700">
+                                    User
+                                </th>
+
+                                <th className="p-4 text-sm font-bold text-slate-700">
+                                    Email
+                                </th>
+
+                                <th className="p-4 text-right text-sm font-bold text-slate-700">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
+
                         <tbody className="divide-y divide-slate-100">
-                            {users.length === 0 ? (
+                            {!users.length ? (
                                 <tr>
-                                    <td colSpan={3} className="text-center py-12 text-slate-400 font-medium">
-                                        No records found. Please search for a user.
+                                    <td
+                                        colSpan={3}
+                                        className="py-14 text-center text-sm font-medium text-slate-400"
+                                    >
+                                        No users found. Search for a
+                                        user to invite.
                                     </td>
                                 </tr>
                             ) : (
                                 users.map((user) => {
-                                    const isSelf = user.email === currentUserEmail
+                                    const isSelf =
+                                        user.email ===
+                                        currentUserEmail
 
                                     return (
-                                        <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="p-4 font-medium">
+                                        <tr
+                                            key={user.id}
+                                            className="transition hover:bg-slate-50"
+                                        >
+                                            {/* User */}
+                                            <td className="p-4">
                                                 <div className="flex items-center gap-3">
-
-                                                    <div className="h-10 w-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-100 overflow-hidden">
+                                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-indigo-100 bg-indigo-50 text-sm font-bold text-indigo-600">
                                                         {user.avatar ? (
-                                                            <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
+                                                            <img
+                                                                src={
+                                                                    user.avatar
+                                                                }
+                                                                alt={
+                                                                    user.name
+                                                                }
+                                                                className="h-full w-full object-cover"
+                                                            />
                                                         ) : (
-                                                            user.name.slice(0, 2).toUpperCase()
+                                                            user.name
+                                                                .slice(
+                                                                    0,
+                                                                    2
+                                                                )
+                                                                .toUpperCase()
                                                         )}
                                                     </div>
+
                                                     <div className="flex items-center gap-2">
-                                                        <span className="font-bold text-slate-800">{user.name}</span>
+                                                        <span className="font-bold text-slate-800">
+                                                            {
+                                                                user.name
+                                                            }
+                                                        </span>
+
                                                         {isSelf && (
-                                                            <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-md border border-slate-200">
+                                                            <span className="rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">
                                                                 You
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="p-4 text-slate-600 font-semibold text-sm">
+
+                                            {/* Email */}
+                                            <td className="p-4 text-sm font-medium text-slate-600">
                                                 {user.email}
                                             </td>
+
+                                            {/* Action */}
                                             <td className="p-4 text-right">
                                                 {isSelf ? (
-                                                    <span className="text-sm font-bold text-slate-400 pr-2">
+                                                    <span className="pr-2 text-sm font-bold text-slate-400">
                                                         Unavailable
                                                     </span>
                                                 ) : user.registrationStatus ? (
-                                                    <div className="flex justify-end">
-                                                        {user.registrationStatus === 'INVITED' && (
-                                                            <span className="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1.5 rounded-xl text-xs font-bold">
-                                                                <CheckCircle className="h-4 w-4" />
-                                                                Invited
-                                                            </span>
-                                                        )}
-
-                                                        {user.registrationStatus === 'PENDING' && (
-                                                            <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl text-xs font-bold">
-                                                                User already registered (Pending)
-                                                            </span>
-                                                        )}
-
-                                                        {user.registrationStatus === 'APPROVED' && (
-                                                            <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold">
-                                                                User already registered (Approved)
-                                                            </span>
-                                                        )}
-
-                                                        {(user.registrationStatus === 'REJECTED' ||
-                                                            user.registrationStatus === 'BANNED') && (
-                                                                <span className="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold">
-                                                                    User rejected or banned
-                                                                </span>
-                                                            )}
-                                                    </div>
+                                                    <StatusBadge
+                                                        status={
+                                                            user.registrationStatus
+                                                        }
+                                                    />
                                                 ) : (
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleInvite(user.email, user.id)}
-                                                        disabled={invitingId !== null}
-                                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors disabled:opacity-60"
+                                                        onClick={() =>
+                                                            handleInvite(
+                                                                user.email,
+                                                                user.id
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            invitingId !==
+                                                            null
+                                                        }
+                                                        className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:opacity-60"
                                                     >
-                                                        {invitingId === user.id ? (
+                                                        {invitingId ===
+                                                            user.id ? (
                                                             <Loader2 className="h-4 w-4 animate-spin" />
                                                         ) : (
                                                             <>
@@ -198,4 +368,56 @@ export default function InviteUserContainer({ eventId, currentUserEmail }: Invit
             </div>
         </div>
     )
+}
+
+// =========================
+// Status Badge Component
+// =========================
+function StatusBadge({
+    status,
+}: {
+    status: SearchUserType['registrationStatus']
+}) {
+    switch (status) {
+        case 'INVITED':
+            return (
+                <div className="flex justify-end">
+                    <span className="inline-flex items-center gap-1.5 rounded-xl border border-purple-200 bg-purple-50 px-3 py-1.5 text-xs font-bold text-purple-700">
+                        <CheckCircle className="h-4 w-4" />
+                        Invited
+                    </span>
+                </div>
+            )
+
+        case 'PENDING':
+            return (
+                <div className="flex justify-end">
+                    <span className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700">
+                        Already Registered (Pending)
+                    </span>
+                </div>
+            )
+
+        case 'APPROVED':
+            return (
+                <div className="flex justify-end">
+                    <span className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+                        Already Registered (Approved)
+                    </span>
+                </div>
+            )
+
+        case 'REJECTED':
+        case 'BANNED':
+            return (
+                <div className="flex justify-end">
+                    <span className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700">
+                        Rejected
+                    </span>
+                </div>
+            )
+
+        default:
+            return null
+    }
 }
