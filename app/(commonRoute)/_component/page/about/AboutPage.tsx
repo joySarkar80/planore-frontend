@@ -45,7 +45,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <span className="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-400 mb-6">
-              ✨ About Planora
+              ✨ About Krowdly
             </span>
 
             <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-8">
@@ -56,7 +56,7 @@ export default function AboutPage() {
             </h1>
 
             <p className="text-xl text-slate-400 leading-relaxed max-w-3xl mx-auto mb-10">
-              Planora helps organizers create engaging events,
+              Krowdly helps organizers create engaging events,
               manage participants, process registrations, and
               build communities through a modern event management
               experience.
@@ -84,16 +84,16 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl font-black mb-6">
-              What is Planora?
+              What is Krowdly?
             </h2>
 
             <p className="text-lg text-slate-600 leading-relaxed">
-              Planora is a modern event management platform where
+              Krowdly is a modern event management platform where
               organizers can create public or private events,
               invite participants, manage approvals, collect
               registration fees, and gather reviews after every
               event. Whether it's a workshop, meetup, seminar, or
-              community gathering, Planora provides everything
+              community gathering, Krowdly provides everything
               needed to run events smoothly.
             </p>
           </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black mb-4">
-              Why Choose Planora?
+              Why Choose Krowdly?
             </h2>
             <p className="text-slate-500">
               Built for organizers and participants alike.
@@ -184,7 +184,7 @@ export default function AboutPage() {
 
             <p className="text-slate-400 text-lg mb-10">
               Discover exciting events, connect with people, and
-              create unforgettable experiences with Planora.
+              create unforgettable experiences with Krowdly.
             </p>
 
             <Link href="/events">

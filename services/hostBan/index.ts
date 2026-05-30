@@ -1,7 +1,8 @@
-const API = process.env.NEXT_PUBLIC_BASE_URL;
+import { getApiUrl } from "../api/apiConfig";
+
 
 export const getBannedUsersService = async () => {
-    const res = await fetch(`${API}/host-ban/banned-users`, {
+    const res = await fetch(`${getApiUrl()}/host-ban/banned-users`, {
         credentials: 'include',
         cache: 'no-store',
     });
@@ -9,7 +10,7 @@ export const getBannedUsersService = async () => {
 };
 
 export const banUserService = async (userId: string, reason?: string) => {
-    const res = await fetch(`${API}/host-ban/ban`, {
+    const res = await fetch(`${getApiUrl()}/host-ban/ban`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -19,7 +20,7 @@ export const banUserService = async (userId: string, reason?: string) => {
 };
 
 export const unbanUserService = async (userId: string) => {
-    const res = await fetch(`${API}/host-ban/unban/${userId}`, {
+    const res = await fetch(`${getApiUrl()}/host-ban/unban/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
     });

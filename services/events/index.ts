@@ -1,4 +1,5 @@
 import { ICreateEvent } from "@/types/event";
+import { getApiUrl } from "../api/apiConfig";
 
 export type PublicEvent = {
     id: string;
@@ -12,11 +13,9 @@ export type PublicEvent = {
     _count: { registrations: number; reviews: number };
 };
 
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
-
 export const createEvent = async (payload: ICreateEvent) => {
     const res = await fetch(
-        `${BASE}/events`,
+        `${getApiUrl()}/events`,
         {
             method: "POST",
             headers: {
@@ -49,8 +48,8 @@ export const getUpcomingEvents = async (): Promise<PublicEvent[]> => {
     // console.log("clicked")
     try {
         const res = await fetch(
-            `${BASE}/events?limit=9&upcoming=true&visibility=PUBLIC`,
-            { next: { revalidate: 10, tags: ['events'] } }
+            `${getApiUrl()}/events?limit=9&upcoming=true&visibility=PUBLIC`,
+            { next: { revalidate: 5, tags: ['events'] } }
         );
         if (!res.ok) return [];
         const json = await res.json();
@@ -73,7 +72,7 @@ export const getAllEvents = async (query: Record<string, any>) => {
 
         const queryString = params.toString() ? `?${params.toString()}` : "";
 
-        const res = await fetch(`${BASE}/events${queryString}`, {
+        const res = await fetch(`${getApiUrl()}/events${queryString}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +105,7 @@ export const getMyEvents = async (query: Record<string, any>) => {
     });
 
     const res = await fetch(
-        `${BASE}/events/my-events?${params.toString()}`,
+        `${getApiUrl()}/events/my-events?${params.toString()}`,
         {
             method: 'GET',
             credentials: 'include',
@@ -127,7 +126,7 @@ export const getMyEvents = async (query: Record<string, any>) => {
 export const getEventById = async (id: string) => {
     try {
         const res = await fetch(
-            `${BASE}/events/${id}`,
+            `${getApiUrl()}/events/${id}`,
             {
                 method: 'GET',
                 cache: 'no-store',
@@ -151,7 +150,7 @@ export const getEventById = async (id: string) => {
 export const updateEvent = async (id: string, data: any) => {
     try {
         const res = await fetch(
-            `${BASE}/events/${id}`,
+            `${getApiUrl()}/events/${id}`,
             {
                 method: 'PATCH',
                 headers: {
@@ -176,9 +175,9 @@ export const updateEvent = async (id: string, data: any) => {
 
 // Delete Event for user
 export const deleteEvent = async (id: string) => {
-    console.log('Deleting event with ID:', id); // Debug log
+    // console.log('Deleting event with ID:', id); // Debug log
     const res = await fetch(
-        `${BASE}/events/${id}`,
+        `${getApiUrl()}/events/${id}`,
         {
             method: 'DELETE',
             credentials: 'include',
@@ -186,9 +185,13 @@ export const deleteEvent = async (id: string) => {
         }
     );
 
+    // console.log("res", res);
+
     if (!res.ok) {
-        throw new Error('Failed to delete event');
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to delete event.');
     }
+
 
     return res.json();
 };
@@ -198,7 +201,7 @@ export const UpdateEventStatus = async (
     eventId: string,
     status: string
 ) => {
-    const res = await fetch(`${BASE}/events/${eventId}/status`, {
+    const res = await fetch(`${getApiUrl()}/events/${eventId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -209,7 +212,7 @@ export const UpdateEventStatus = async (
 
 // for admin to delete event
 export const adminDeleteEvent = async (eventId: string) => {
-    const res = await fetch(`${BASE}/events/admin/${eventId}`, {
+    const res = await fetch(`${getApiUrl()}/events/admin/${eventId}`, {
         method: 'DELETE',
         credentials: 'include',
     });
@@ -227,7 +230,7 @@ export const getAllEventsForAdmin = async (query: Record<string, any>) => {
     });
 
     const res = await fetch(
-        `${BASE}/events/admin?${params.toString()}`,
+        `${getApiUrl()}/events/admin?${params.toString()}`,
         {
             method: 'GET',
             credentials: 'include',

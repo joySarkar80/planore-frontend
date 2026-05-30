@@ -90,6 +90,12 @@ export default function InviteUserContainer({
                 return
             }
 
+            if (response.data.length === 0) {
+                toast.error('No users found matching your search');
+            } else {
+                toast.success(`Found ${response.data.length} users`);
+            }
+
             setUsers(response.data || [])
         } catch (error) {
             console.error(error)

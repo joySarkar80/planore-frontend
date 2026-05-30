@@ -110,7 +110,7 @@ export default function MyEventsContainer() {
 
         try {
             const res = await deleteEvent(eventId);
-
+            // console.log(res)
             if (res.success) {
 
                 // Remove deleted event locally
@@ -135,8 +135,8 @@ export default function MyEventsContainer() {
             } else {
                 toast.error(res.message || 'Failed to delete');
             }
-        } catch {
-            toast.error('Something went wrong');
+        } catch (error: any) {
+            toast.error(error?.message || 'Something went wrong');
         } finally {
             setDeletingId(null);
         }

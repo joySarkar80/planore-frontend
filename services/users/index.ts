@@ -1,4 +1,5 @@
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+import { getApiUrl } from "../api/apiConfig";
+
 
 export type UpcomingRegistration = {
     id: string;
@@ -28,7 +29,7 @@ export const updateUserStatus = async (
     userId: string,
     status: string
 ) => {
-    const res = await fetch(`${BASE}/users/${userId}/status`, {
+    const res = await fetch(`${getApiUrl()}/users/${userId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -38,7 +39,7 @@ export const updateUserStatus = async (
 };
 
 export const deleteUser = async (userId: string) => {
-    const res = await fetch(`${BASE}/users/${userId}`, {
+    const res = await fetch(`${getApiUrl()}/users/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
     });
@@ -52,7 +53,7 @@ export const getAllUsers = async (page: number, search?: string) => {
     params.append('page', String(page));
     params.append('limit', '20');
 
-    const res = await fetch(`${BASE}/users/all?${params}`, {
+    const res = await fetch(`${getApiUrl()}/users/all?${params}`, {
         credentials: 'include',
         cache: 'no-store',
     });
@@ -61,7 +62,7 @@ export const getAllUsers = async (page: number, search?: string) => {
 
 export const getMyProfile = async (): Promise<MyProfile | null> => {
     try {
-        const res = await fetch(`${BASE}/users/me`, {
+        const res = await fetch(`${getApiUrl()}/users/me`, {
             credentials: 'include',
             cache: 'no-store',
         });
@@ -77,7 +78,7 @@ export const updateMyProfile = async (payload: {
     name?: string;
     avatar?: string;
 }) => {
-    const res = await fetch(`${BASE}/users/me`, {
+    const res = await fetch(`${getApiUrl()}/users/me`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

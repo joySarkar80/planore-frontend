@@ -60,7 +60,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-primary">
             <Calendar className="h-6 w-6 text-indigo-600" />
-            <span>Evently</span>
+            <span>Krowdly</span>
           </Link>
         </div>
 

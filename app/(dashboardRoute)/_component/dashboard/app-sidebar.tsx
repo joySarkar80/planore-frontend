@@ -41,7 +41,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                             <Calendar className="w-5 h-5 text-white" />
                         </div>
                         <span className="text-xl font-bold text-slate-900">
-                            Planora
+                            Krowdly
                         </span>
                     </Link>
                 </div>
@@ -67,7 +67,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                     <div className="bg-indigo-600 p-1 rounded">
                         <Calendar className="w-4 h-4 text-white" />
                     </div>
-                    <span className="font-bold">Planora</span>
+                    <span className="font-bold">Krowdly</span>
                 </Link>
 
                 {/* Shadcn Sheet Component */}

@@ -16,19 +16,25 @@ export function JoinedEventRow({
     registration: any;
     onRefresh: () => void;
 }) {
-    const { event, status, paymentStatus, createdAt } = registration;
+    const { event, status, paymentStatus } = registration;
 
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    // লোকাল স্টেট — রিভিউ আছে কিনা এবং রিভিউ ডেটা
+    const [isReviewed, setIsReviewed] = useState(event.reviews?.length > 0);
+    const [myReview, setMyReview] = useState(
+        event.reviews?.length > 0 ? event.reviews[0] : null
+    );
 
     const isPrivatePaidEvent =
         event.visibility === 'PRIVATE' && Number(event.registrationFee) > 0;
     const hasPaid = paymentStatus === 'PAID';
     const showPayButton = isPrivatePaidEvent && !hasPaid;
 
-    const existingReview = event.reviews?.length > 0 ? event.reviews[0] : null;
-    const hasReviewed = !!existingReview;
+    const hasReviewed = isReviewed;
+    const existingReview = myReview;
 
     const handlePrivatePayment = async (eventId: string) => {
         try {
@@ -46,6 +52,21 @@ export function JoinedEventRow({
         }
     };
 
+    // রিভিউ সফলভাবে সাবমিট হলে এই ফাংশন কল হবে
+    // CreateReviewModal থেকে rating ও comment ডেটা রিসিভ করবে
+    const handleReviewSuccess = (newReviewData?: { rating: number; comment: string }) => {
+        setIsReviewed(true);
+
+        if (newReviewData) {
+            setMyReview({
+                rating: newReviewData.rating,
+                comment: newReviewData.comment,
+                createdAt: new Date().toISOString(),
+                user: registration.user || {},
+            });
+        }
+    };
+
     return (
         <tr className="hover:bg-gray-50 transition-colors">
             {/* Event Name */}
@@ -56,8 +77,8 @@ export function JoinedEventRow({
             {/* Visibility */}
             <td className="px-4 py-3 whitespace-nowrap">
                 <span className={`text-xs font-semibold px-2 py-1 rounded-full ${event.visibility === 'PUBLIC'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-purple-100 text-purple-700'
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-purple-100 text-purple-700'
                     }`}>
                     {event.visibility}
                 </span>
@@ -76,10 +97,10 @@ export function JoinedEventRow({
             {/* Join Status */}
             <td className="px-4 py-3 whitespace-nowrap">
                 <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${status === 'APPROVED'
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    : status === 'PENDING'
-                        ? 'bg-amber-50 text-amber-700 border-amber-200'
-                        : 'bg-rose-50 text-rose-700 border-rose-200'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : status === 'PENDING'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-rose-50 text-rose-700 border-rose-200'
                     }`}>
                     {status}
                 </span>
@@ -88,10 +109,10 @@ export function JoinedEventRow({
             {/* Payment Status */}
             <td className="px-4 py-3 whitespace-nowrap">
                 <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${paymentStatus === 'PAID'
-                    ? 'bg-blue-50 text-blue-700 border-blue-200'
-                    : paymentStatus === 'FREE'
-                        ? 'bg-slate-100 text-slate-600 border-slate-200'
-                        : 'bg-orange-50 text-orange-700 border-orange-200'
+                        ? 'bg-blue-50 text-blue-700 border-blue-200'
+                        : paymentStatus === 'FREE'
+                            ? 'bg-slate-100 text-slate-600 border-slate-200'
+                            : 'bg-orange-50 text-orange-700 border-orange-200'
                     }`}>
                     {paymentStatus}
                 </span>
@@ -142,7 +163,8 @@ export function JoinedEventRow({
                         isOpen={createModalOpen}
                         onClose={() => setCreateModalOpen(false)}
                         eventId={event.id}
-                        onReviewSubmit={onRefresh}
+                        // handleReviewSuccess-এ সরাসরি নতুন ডেটা পাস হচ্ছে
+                        onReviewSubmit={handleReviewSuccess}
                     />
                 )}
 
@@ -150,20 +172,20 @@ export function JoinedEventRow({
                     <ViewReviewModal
                         isOpen={viewModalOpen}
                         onClose={() => setViewModalOpen(false)}
-                        review={existingReview
-                            ? {
-                                rating: existingReview.rating,
-                                comment: existingReview.comment,
-                                createdAt: existingReview.createdAt,
-                                user: existingReview.user,
-                            }
-                            : null
+                        review={
+                            existingReview
+                                ? {
+                                    rating: existingReview.rating,
+                                    comment: existingReview.comment,
+                                    createdAt: existingReview.createdAt,
+                                    user: existingReview.user,
+                                }
+                                : null
                         }
                         eventTitle={event.title}
                     />
                 )}
             </td>
-        </tr> 
+        </tr>
     );
-
 }

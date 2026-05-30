@@ -1,4 +1,6 @@
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+import { getApiUrl } from "../api/apiConfig";
+
+// const getApiUrl() = getApiUrl();
 
 export type DashboardStatsType = {
     upcomingApprovedEventsCount: number;
@@ -37,7 +39,7 @@ export const getDashboardStats = async (): Promise<{
     message?: string;
 }> => {
     try {
-        const res = await fetch(`${BASE}/dashboard/stats`, {
+        const res = await fetch(`${getApiUrl()}/dashboard/stats`, {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store',
@@ -63,14 +65,14 @@ export const getRecentEventsService = async (): Promise<{
     message?: string;
 }> => {
     try {
-        const res = await fetch(`${BASE}/events/recent-events`, {
+        const res = await fetch(`${getApiUrl()}/events/recent-events`, {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store',
         });
 
         const data = await res.json();
-        console.log(data)
+        // console.log(data)
 
         if (!res.ok) {
             return { success: false, data: [], message: data.message || 'Failed to load events.' };
@@ -89,7 +91,7 @@ export const getMyInvitationsService = async (): Promise<{
     message?: string;
 }> => {
     try {
-        const res = await fetch(`${BASE}/invitations/my-invitations`, {
+        const res = await fetch(`${getApiUrl()}/invitations/my-invitations`, {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store',

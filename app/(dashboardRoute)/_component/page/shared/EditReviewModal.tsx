@@ -15,6 +15,8 @@ export default function EditReviewModal({ isOpen, onClose, review, onUpdate, isU
     const [editComment, setEditComment] = useState("");
     const [editRating, setEditRating] = useState(5);
 
+    // console.log(review)
+
     useEffect(() => {
         if (review && isOpen) {
             setEditComment(review.comment || "");
@@ -49,7 +51,7 @@ export default function EditReviewModal({ isOpen, onClose, review, onUpdate, isU
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
+                    <h1 className="block text-lg font-medium text-gray-700 mb-1">{review.event.title}</h1>
                     <textarea
                         rows={4}
                         value={editComment}

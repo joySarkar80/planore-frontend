@@ -1,8 +1,8 @@
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+import { getApiUrl } from "../api/apiConfig";
 
 export const createReviewService = async (reviewData: { eventId: string; rating: number; comment?: string }) => {
     try {
-        const res = await fetch(`${BASE}/reviews`, {
+        const res = await fetch(`${getApiUrl()}/reviews`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export const createReviewService = async (reviewData: { eventId: string; rating:
 
 export const getMyReviewsService = async () => {
     try {
-        const res = await fetch(`${BASE}/reviews/my-reviews`, {
+        const res = await fetch(`${getApiUrl()}/reviews/my-reviews`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -46,7 +46,7 @@ export const getMyReviewsService = async () => {
 
 export const getEventReviewsService = async (eventId: string) => {
     try {
-        const res = await fetch(`${BASE}/reviews/event/${eventId}`, {
+        const res = await fetch(`${getApiUrl()}/reviews/event/${eventId}`, {
             method: 'GET',
             cache: 'no-store',
         });
@@ -59,7 +59,7 @@ export const getEventReviewsService = async (eventId: string) => {
 
 export const updateReviewService = async (reviewId: string, payload: { rating?: number; comment?: string }) => {
     try {
-        const res = await fetch(`${BASE}/reviews/${reviewId}`, {
+        const res = await fetch(`${getApiUrl()}/reviews/${reviewId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -74,7 +74,7 @@ export const updateReviewService = async (reviewId: string, payload: { rating?: 
 
 export const deleteReviewService = async (reviewId: string) => {
     try {
-        const res = await fetch(`${BASE}/reviews/${reviewId}`, {
+        const res = await fetch(`${getApiUrl()}/reviews/${reviewId}`, {
             method: 'DELETE',
             credentials: 'include',
         });

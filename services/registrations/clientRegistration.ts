@@ -1,12 +1,12 @@
 import { SingleEvent } from "@/types/event";
 import { ParticipantType } from "@/types/registration";
+import { getApiUrl } from "../api/apiConfig";
 
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const joinEvent = async (eventId: string) => {
     try {
         const res = await fetch(
-            `${BASE}/registrations/join/${eventId}`,
+            `${getApiUrl()}/registrations/join/${eventId}`,
             {
                 method: 'POST',
                 credentials: 'include',
@@ -25,7 +25,7 @@ export const joinEvent = async (eventId: string) => {
 export const payPrivateEvent = async (eventId: string) => {
     try {
         const res = await fetch(
-            `${BASE}/registrations/pay/${eventId}`,
+            `${getApiUrl()}/registrations/pay/${eventId}`,
             {
                 method: 'POST',
                 credentials: 'include',
@@ -49,7 +49,7 @@ export const getEventParticipantsService = async (
     eventId: string
 ): Promise<{ success: boolean; data: EventParticipantsResponse | null; message?: string }> => {
     try {
-        const res = await fetch(`${BASE}/registrations/participants?eventId=${eventId}`, {
+        const res = await fetch(`${getApiUrl()}/registrations/participants?eventId=${eventId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -74,7 +74,7 @@ export const updateParticipantStatusService = async (
     status: string
 ): Promise<{ success: boolean; message: string }> => {
     try {
-        const res = await fetch(`${BASE}/registrations/participants/${registrationId}/status`, {
+        const res = await fetch(`${getApiUrl()}/registrations/participants/${registrationId}/status`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
@@ -94,7 +94,7 @@ export const getMyJoinedEventsService = async (
 ) => {
     try {
         const res = await fetch(
-            `${BASE}/registrations/my-joined-events?filter=${filter}`,
+            `${getApiUrl()}/registrations/my-joined-events?filter=${filter}`,
             {
                 method: 'GET',
                 credentials: 'include',
@@ -127,7 +127,7 @@ export const getMyJoinedEventsService = async (
 
 export const deleteRegistrationService = async (registrationId: string) => {
     const res = await fetch(
-        `${BASE}/registrations/${registrationId}`,
+        `${getApiUrl()}/registrations/${registrationId}`,
         {
             method: 'DELETE',
             credentials: 'include',

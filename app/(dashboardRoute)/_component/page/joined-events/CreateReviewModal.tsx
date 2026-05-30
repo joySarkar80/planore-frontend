@@ -9,7 +9,8 @@ type CreateReviewModalProps = {
     isOpen: boolean;
     onClose: () => void;
     eventId: string;
-    onReviewSubmit: () => void;
+    // rating ও comment ডেটা parent-এ পাঠানোর জন্য optional parameter
+    onReviewSubmit: (data?: { rating: number; comment: string }) => void;
 };
 
 export default function CreateReviewModal({
@@ -33,9 +34,11 @@ export default function CreateReviewModal({
 
         if (response.success) {
             toast.success('Review submitted successfully!');
-            onReviewSubmit();
+
+            // rating ও comment ডেটা parent-এ পাঠানো হচ্ছে
+            onReviewSubmit({ rating, comment });
+
             onClose();
-            // reset
             setRating(5);
             setComment('');
         } else {
@@ -77,8 +80,8 @@ export default function CreateReviewModal({
                                 >
                                     <Star
                                         className={`h-7 w-7 transition-colors ${star <= (hoveredRating || rating)
-                                            ? 'fill-yellow-400 text-yellow-400'
-                                            : 'text-gray-200'
+                                                ? 'fill-yellow-400 text-yellow-400'
+                                                : 'text-gray-200'
                                             }`}
                                     />
                                 </button>

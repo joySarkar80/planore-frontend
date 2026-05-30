@@ -16,7 +16,7 @@ export default function RegisterPage() {
               <Calendar className="w-8 h-8 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Join Planora</CardTitle>
+          <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Join Krowdly</CardTitle>
           <p className="text-sm font-medium text-slate-500">Create an account to start hosting and joining events.</p>
         </CardHeader>
         <RegisterForm />

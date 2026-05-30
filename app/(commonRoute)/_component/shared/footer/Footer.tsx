@@ -9,7 +9,7 @@ export function Footer() {
           <div className="col-span-1 md:col-span-1 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-primary">
               <Calendar className="h-6 w-6 text-indigo-600" />
-              <span>Evently</span>
+              <span>Krowdly</span>
             </Link>
             <p className="text-sm text-slate-500 max-w-xs">
               The world&apos;s premier platform for creating, discovering, and joining meaningful events.
@@ -66,7 +66,7 @@ export function Footer() {
         </div>
         
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400 uppercase tracking-widest font-medium">
-          <p>© 2025 Evently Inc. All rights reserved.</p>
+          <p>© 2025 Krowdly Inc. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-slate-900">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-slate-900">Terms of Use</Link>

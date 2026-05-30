@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Planora | Secure Event Management",
+  title: "Krowdly | Secure Event Management",
   description: "A secure event management platform for creating, discovering, and joining events.",
 };
 

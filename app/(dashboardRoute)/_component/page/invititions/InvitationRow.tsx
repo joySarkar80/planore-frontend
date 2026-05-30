@@ -9,7 +9,7 @@ import { initiatePayment, respondToInvitation } from '@/services/invititions';
 export default function InvitationRow({ invitation }: { invitation: any }) {
     const router = useRouter();
     const [loadingAction, setLoadingAction] = useState<string | null>(null);
-    const [isVisible, setIsVisible] = useState(true); // রিজেক্ট করার পর সাথে সাথে হাইড করার জন্য স্টেট
+    const [isVisible, setIsVisible] = useState(true);
 
     const event = invitation.event;
     const isFree = Number(event.registrationFee) === 0;
@@ -18,114 +18,64 @@ export default function InvitationRow({ invitation }: { invitation: any }) {
 
     const acceptButtonText = isFree ? 'Accept' : 'Accept and Pay';
 
-    // const handleResponse = async (action: 'ACCEPT' | 'REJECT') => {
-    //     try {
-    //         setLoadingAction(action);
+  const handleResponse = async (action: 'ACCEPT' | 'REJECT') => {
+    try {
+        setLoadingAction(action);
 
-    //         // ১. শুধুমাত্র Public Paid ইভেন্ট হলে Stripe এ যাবে
-    //         if (action === 'ACCEPT' && isPublicPaid) {
-    //             const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    //             const successUrl = `${origin}/dashboard/joined-events`;
-    //             const cancelUrl = `${origin}/dashboard/invitations`;
+        // ১. Public Paid (Stripe Logic)
+        if (action === 'ACCEPT' && isPublicPaid) {
+            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+            const successUrl = `${origin}/dashboard/joined-events`;
+            const cancelUrl = `${origin}/dashboard/invitations`;
 
-    //             const paymentRes = await initiatePayment(event.id, invitation.id, successUrl, cancelUrl);
+            const paymentRes = await initiatePayment(event.id, invitation.id, successUrl, cancelUrl);
 
-    //             if (paymentRes.success && paymentRes.data?.paymentUrl) {
-    //                 toast.loading('Opening secure payment gateway...');
-    //                 window.location.href = paymentRes.data.paymentUrl;
-    //                 return;
-    //             } else {
-    //                 toast.error(paymentRes.message || "Failed to open Stripe page.");
-    //             }
-    //         }
-    //         // ২. বাকি সব (Public Free, Private Free, Private Paid) সরাসরি API কল হবে
-    //         else {
-    //             const res = await respondToInvitation(invitation.id, action);
-
-    //             if (res.success) {
-    //                 if (action === 'ACCEPT') {
-    //                     toast.success('Event joined successfully!');
-    //                     router.push('/dashboard/joined-events'); // সাকসেস হলে joined-events পেজে যাবে
-    //                 } else if (action === 'REJECT') {
-    //                     toast.success('Invitation has been rejected.');
-    //                     setIsVisible(false); // UI থেকে ইভেন্টটি সাথে সাথে হাইড করে দেওয়া হলো
-    //                     router.refresh(); // ডেটাবেস সিঙ্ক করার জন্য ব্যাকগ্রাউন্ডে রিফ্রেশ
-    //                 }
-    //             } else {
-    //                 toast.error(res.message || 'Action failed.');
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         toast.error('An unexpected error occurred!');
-    //     } finally {
-    //         if (!(action === 'ACCEPT' && isPublicPaid)) {
-    //             setLoadingAction(null);
-    //         }
-    //     }
-    // };
-
-    const handleResponse = async (action: 'ACCEPT' | 'REJECT') => {
-        try {
-            setLoadingAction(action);
-
-            // ১. Public Paid (Stripe Logic)
-            if (action === 'ACCEPT' && isPublicPaid) {
-                const origin = typeof window !== 'undefined' ? window.location.origin : '';
-                // এখানে সাকসেস হলে পেমেন্ট গেটওয়েতে যাবে
-                const successUrl = `${origin}/dashboard/joined-events`;
-                const cancelUrl = `${origin}/dashboard/invitations`;
-
-                const paymentRes = await initiatePayment(event.id, invitation.id, successUrl, cancelUrl);
-
-                if (paymentRes.success && paymentRes.data?.paymentUrl) {
-                    toast.loading('Opening secure payment gateway...');
-                    window.location.href = paymentRes.data.paymentUrl;
-                    return;
-                } else {
-                    toast.error(paymentRes.message || "Failed to open Stripe page.");
-                }
-            }
-            // ২. বাকি সব (Public Free, Private Free, Private Paid) API কল
-            else {
-                const res = await respondToInvitation(invitation.id, action);
-
-                if (res.success) {
-                    if (action === 'ACCEPT') {
-                        // ৪টি সিনারিওর জন্য আলাদা টোস্ট মেসেজ
-                        if (event.visibility === 'PRIVATE' && isFree) {
-                            toast.success('Registration successfull. Please wait for owner approval.');
-                        }
-                        else if (event.visibility === 'PRIVATE' && !isFree) {
-                            toast.success('Registration successfull. Please wait for event owner approval. Then make payment from the join event page. Dashboard -> then click join events.');
-                        }
-                        else if (event.visibility === 'PUBLIC' && isFree) {
-                            toast.success('Event joined successfully!');
-                        }
-
-                        router.push('/dashboard/joined-events');
-                    }
-                    else if (action === 'REJECT') {
-                        toast.success('Invitation has been rejected.');
-                        setIsVisible(false);
-                        router.refresh();
-                    }
-                } else {
-                    // ব্যাকএন্ড থেকে আসা স্পেসিফিক এরর মেসেজ (যেমন: "Already registered")
-                    toast.error(res.message || 'Action failed.');
-                }
-            }
-        } catch (error: any) {
-            console.error(error);
-            toast.error(error.message || 'An unexpected error occurred!');
-        } finally {
-            if (!(action === 'ACCEPT' && isPublicPaid)) {
+            if (paymentRes.success && paymentRes.data?.paymentUrl) {
+                toast.loading('Opening secure payment gateway...');
+                window.location.href = paymentRes.data.paymentUrl;
+                return; 
+            } else {
+                toast.error(paymentRes.message || "Failed to open Stripe page.");
                 setLoadingAction(null);
             }
         }
-    };
+        
+        else {
+            const res = await respondToInvitation(invitation.id, action);
 
-    // ইভেন্ট রিজেক্ট হয়ে গেলে কম্পোনেন্টটি আর রেন্ডার হবে না (Hide হয়ে যাবে)
+            if (res.success) {
+                if (action === 'ACCEPT') {
+                    if (event.visibility === 'PRIVATE' && isFree) {
+                        toast.success('Registration successfull. Please wait for owner approval.');
+                    }
+                    else if (event.visibility === 'PRIVATE' && !isFree) {
+                        toast.success('Registration successfull. Please wait for event owner approval. Then make payment from the join event page. Dashboard -> then click join events.');
+                    }
+                    else if (event.visibility === 'PUBLIC' && isFree) {
+                        toast.success('Event joined successfully!');
+                    }
+
+                    router.push('/dashboard/joined-events');
+                }
+                else if (action === 'REJECT') {
+                    toast.success('Invitation has been rejected.');
+                    setIsVisible(false);
+                    router.refresh();
+                }
+            } else {
+                toast.error(res.message || 'Action failed.');
+                setLoadingAction(null); 
+            }
+        }
+    } catch (error: any) {
+        console.error(error);
+        toast.error(error.message || 'An unexpected error occurred!');
+        setLoadingAction(null); 
+    } finally {
+        
+    }
+};
+
     if (!isVisible) return null;
 
     return (

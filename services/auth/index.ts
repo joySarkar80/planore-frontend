@@ -1,12 +1,13 @@
 "use server";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
+import { getApiUrl } from "../api/apiConfig";
 
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
+//    const res = await fetch(`${getApiUrl()}/auth/login`, {
 
 export const loginUser = async (userData: { email: string; password: string }) => {
     try {
-        const res = await fetch(`${BASE}/auth/login`, {
+        const res = await fetch(`${getApiUrl()}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -53,7 +54,7 @@ export const registerUser = async (data: {
     email: string;
     password: string;
 }) => {
-    const res = await fetch(`${BASE}/auth/register`, {
+    const res = await fetch(`${getApiUrl()}/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

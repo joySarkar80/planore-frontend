@@ -1,3 +1,4 @@
+import { getApiUrl } from "../api/apiConfig";
 
 export type FeaturedEventData = {
   id: string;
@@ -14,10 +15,9 @@ export type FeaturedEventData = {
   };
 };
 
-const BASE = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const setFeaturedEvent = async (eventId: string) => {
-  const res = await fetch(`${BASE}/featured-events`, {
+  const res = await fetch(`${getApiUrl()}/featured-events`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ eventId }),
@@ -29,8 +29,8 @@ export const setFeaturedEvent = async (eventId: string) => {
 
 export const getFeaturedEvent = async (): Promise<FeaturedEventData | null> => {
   try {
-    const res = await fetch(`${BASE}/featured-events`, {
-      next: { revalidate: 10, tags: ['featured-event'] },
+    const res = await fetch(`${getApiUrl()}/featured-events`, {
+      next: { revalidate: 2, tags: ['featured-event'] },
     });
     if (!res.ok) return null;
     const json = await res.json();
